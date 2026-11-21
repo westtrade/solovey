@@ -71,7 +71,7 @@ function article_card(array $article, string $variant = 'default', array $attrib
 			. '<div class="grid gap-0 overflow-hidden rounded-xl border border-ink bg-ink transition duration-200 hover:-translate-y-0.5 hover:shadow-lift md:grid-cols-[1.1fr_1fr]">'
 			. '<div class="relative aspect-[16/10] overflow-hidden bg-paper-2 md:aspect-auto md:min-h-[26rem]">'
 			. $media('cover', '1200', '750', true)
-			. '<span class="absolute left-3 top-3 inline-flex items-center gap-1.5 rounded-lg bg-ink/85 px-2.5 py-1 text-[11px] font-semibold text-paper backdrop-blur-sm">'
+			. '<span class="absolute left-3 top-3 inline-flex items-center gap-1.5 rounded-md bg-ink/85 px-2 py-1 text-xs font-semibold text-paper backdrop-blur-sm">'
 			. '<span class="h-1.5 w-1.5 rounded-full ' . e($accent['dot']) . '"></span>'
 			. e((string) ($article['category_title'] ?? '')) . '</span>'
 			. '</div>'
@@ -129,16 +129,16 @@ function article_card(array $article, string $variant = 'default', array $attrib
 		. '<a href="' . e($url) . '" data-rise class="flex h-full flex-col overflow-hidden rounded-xl border border-line bg-white transition duration-200 hover:-translate-y-0.5 hover:border-line-strong hover:shadow-lift">'
 		. '<div class="relative aspect-[16/10] overflow-hidden bg-paper-2">'
 		. $media('card', '640', '400')
-		. '<span class="absolute left-3 top-3 inline-flex items-center gap-1.5 rounded-lg bg-ink/85 px-2 py-1 text-[11px] font-semibold text-paper backdrop-blur-sm">'
+		. '<span class="absolute left-3 top-3 inline-flex items-center gap-1.5 rounded-md bg-ink/85 px-2 py-1 text-xs font-semibold text-paper backdrop-blur-sm">'
 		. '<span class="h-1.5 w-1.5 rounded-full ' . e($accent['dot']) . '"></span>'
 		. e((string) ($article['category_title'] ?? '')) . '</span>'
 		. ($flagLabel !== null
-			? '<span class="absolute right-3 top-3 inline-flex items-center gap-1 rounded-md bg-paper/90 px-2 py-1 text-[11px] font-semibold text-ink ring-1 ring-ink/10 backdrop-blur-sm">'
+			? '<span class="absolute right-3 top-3 inline-flex items-center gap-1 rounded-md bg-paper/90 px-2 py-1 text-xs font-semibold text-ink ring-1 ring-ink/10 backdrop-blur-sm">'
 				. icon_svg((string) $flagIcon, 12, 'text-alert') . e($flagLabel) . '</span>'
 			: '')
 		. '</div>'
 		. '<div class="flex flex-1 flex-col p-4">'
-		. '<div class="flex items-center gap-1.5 text-[11px] text-muted">'
+		. '<div class="flex items-center gap-1.5 text-xs text-muted">'
 		. '<time datetime="' . e($iso) . '">' . e($time) . '</time>'
 		. '<span aria-hidden="true">·</span>'
 		. '<span class="inline-flex items-center gap-1">' . icon_svg('clock', 11) . e((string) $minutes) . ' мин</span>'

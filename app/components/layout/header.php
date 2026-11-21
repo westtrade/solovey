@@ -54,7 +54,7 @@ $today = (new DateTimeImmutable('now'))->format('c');
 					</span>
 					<span class="leading-none">
 						<span class="block font-display text-2xl tracking-tight text-ink">Соловей</span>
-						<span class="mt-1 block text-[11px] text-muted">Курск и область</span>
+						<span class="mt-1 block text-xs text-muted">Курск и область</span>
 					</span>
 				</a>
 

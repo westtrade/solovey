@@ -185,7 +185,7 @@ $this->start('page');
 				</div>
 
 				<?php if ($source !== null && (string) $source['title'] !== ''): ?>
-					<div class="mt-8 flex flex-wrap items-center gap-3 rounded-xl border border-line bg-paper-2/50 px-4 py-3 text-sm">
+					<div class="mt-8 flex flex-wrap items-center gap-3 rounded-lg border border-line bg-paper-2/50 px-4 py-3 text-sm">
 						<span class="text-xs text-muted">Источник</span>
 						<a href="<?= e((string) $source['url']) ?>" class="group inline-flex items-center gap-1.5 font-medium text-ink transition-colors hover:text-brand">
 							<?= e((string) $source['title']) ?>
@@ -193,7 +193,7 @@ $this->start('page');
 								<?= $this->insert('bolt://ui-kit/icon', ['name' => 'external', 'size' => 13]) ?>
 							</span>
 						</a>
-						<span class="rounded-md bg-white px-2 py-0.5 text-[11px] text-muted"><?= e((string) $source['kind_label']) ?></span>
+						<span class="rounded-md bg-white px-2 py-0.5 text-xs text-muted"><?= e((string) $source['kind_label']) ?></span>
 					</div>
 				<?php endif; ?>
 
@@ -209,8 +209,9 @@ $this->start('page');
 				<?php endif; ?>
 
 				<?php // Кнопки соцсетей: прямые ссылки, без трекеров. ?>
-				<div class="mt-8 rounded-2xl border border-line bg-white/60 p-4">
-					<p class="text-xs font-medium text-muted">Рассказать</p>
+				<?php // Чернильная плашка в конце материала: контрастная точка вместо ещё одной белой карточки. ?>
+				<div class="mt-8 rounded-xl bg-ink p-4">
+					<p class="text-xs font-medium text-paper/60">Рассказать</p>
 					<div class="mt-3 flex flex-wrap gap-2">
 						<?php
 						$shareUrl = rawurlencode($absolute);
@@ -226,7 +227,7 @@ $this->start('page');
 								href="<?= e($network['href']) ?>"
 								target="_blank"
 								rel="noopener noreferrer"
-								class="inline-flex items-center gap-2 rounded-lg border border-line px-3.5 py-2 text-xs font-medium text-ink-soft transition-colors hover:border-brand/40 hover:text-brand"
+								class="inline-flex items-center gap-2 rounded-lg border border-paper/20 px-3.5 py-2 text-xs font-medium text-paper/80 transition-colors hover:border-paper/45 hover:text-paper"
 							>
 								<?= $this->insert('bolt://ui-kit/icon', ['name' => $network['icon'], 'size' => 14]) ?>
 								<?= e($network['title']) ?>
@@ -237,11 +238,11 @@ $this->start('page');
 							type="button"
 							x-data="shareButton('<?= e($absolute) ?>', '<?= e((string) $article['title']) ?>')"
 							@click="share()"
-							class="inline-flex items-center gap-2 rounded-lg border border-line px-3.5 py-2 text-xs font-medium text-ink-soft transition-colors hover:border-brand/40 hover:text-brand"
+							class="inline-flex items-center gap-2 rounded-lg border border-paper/20 px-3.5 py-2 text-xs font-medium text-paper/80 transition-colors hover:border-paper/45 hover:text-paper"
 						>
 							<?= $this->insert('bolt://ui-kit/icon', ['name' => 'link', 'size' => 14]) ?>
 							<span x-show="!copied">Скопировать ссылку</span>
-							<span x-show="copied" x-cloak class="text-brand">Готово</span>
+							<span x-show="copied" x-cloak class="text-brand-light">Готово</span>
 						</button>
 					</div>
 				</div>
