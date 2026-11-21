@@ -17,6 +17,7 @@ declare(strict_types=1);
  * @param string|null       $icon
  * @param bool              $showFeedsTabs
  * @param int               $limit
+ * @param int|null          $total    всего материалов в выборке
  */
 
 $title ??= '';
@@ -28,6 +29,7 @@ $empty ??= 'Здесь пока нет материалов.';
 $icon ??= null;
 $showFeedsTabs ??= true;
 $limit ??= 12;
+$total ??= null;
 
 if (!is_callable($loader)) {
 	return;
@@ -78,23 +80,39 @@ if (!is_callable($loader)) {
 				</nav>
 			<?php endif; ?>
 
-			<h2 class="sr-only">Материалы: <?= e($title) ?></h2>
+			<?php if ($total === 0): ?>
+				<?php // Пустая подборка: вместо сетки и кнопки — объяснение и выход. ?>
+				<div class="rounded-2xl border border-dashed border-line bg-white/50 px-6 py-14 text-center">
+					<span class="mx-auto flex h-11 w-11 items-center justify-center rounded-full bg-paper-2 text-muted">
+						<?= $this->insert('bolt://ui-kit/icon', ['name' => 'grid', 'size' => 18]) ?>
+					</span>
+					<p class="mt-4 font-display text-lg text-ink">Здесь пока пусто</p>
+					<p class="mx-auto mt-1.5 max-w-sm text-sm leading-relaxed text-muted"><?= e($empty) ?></p>
+					<div class="mt-5 flex flex-wrap items-center justify-center gap-2">
+						<a href="/lenta" class="inline-flex items-center gap-1.5 rounded-full bg-ink px-4 py-2 text-xs font-medium text-paper transition-colors hover:bg-ink-soft">
+							<?= $this->insert('bolt://ui-kit/icon', ['name' => 'list', 'size' => 13]) ?>
+							Вся лента
+						</a>
+						<a href="/" class="inline-flex items-center gap-1.5 rounded-full border border-line bg-white/70 px-4 py-2 text-xs font-medium text-ink-soft transition-colors hover:border-line-strong hover:text-ink">
+							На главную
+						</a>
+					</div>
+				</div>
+			<?php else: ?>
+				<h2 class="sr-only">Материалы: <?= e($title) ?></h2>
 
-			<?= $this->insert('bolt://ui-kit/pagination', [
-				'name' => $name,
-				'loader' => $loader,
-				'limit' => $limit,
-				'idField' => 'id',
-				'class' => 'grid gap-4 sm:grid-cols-2',
-				'item' => static function (array $attrs, array $meta): void {
-					echo article_card($attrs, 'default', ['id' => $attrs['id'], 'class' => $attrs['class']]);
-				},
-				'trigger' => pagination_trigger(),
-			]) ?>
-
-			<p class="mt-6 text-xs text-muted">
-				<?= e($empty) ?>
-			</p>
+				<?= $this->insert('bolt://ui-kit/pagination', [
+					'name' => $name,
+					'loader' => $loader,
+					'limit' => $limit,
+					'idField' => 'id',
+					'class' => 'grid gap-4 sm:grid-cols-2',
+					'item' => static function (array $attrs, array $meta): void {
+						echo article_card($attrs, 'default', ['id' => $attrs['id'], 'class' => $attrs['class']]);
+					},
+					'trigger' => pagination_trigger(),
+				]) ?>
+			<?php endif; ?>
 		</div>
 
 		<div class="min-w-0">

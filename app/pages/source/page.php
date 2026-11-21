@@ -34,6 +34,7 @@ $this->start('page');
 	'icon' => 'building',
 	'loader' => feed_loader(null, null, null, null, (int) $source['id']),
 	'name' => 'source-' . $slug,
+	'total' => $total,
 	'showFeedsTabs' => false,
 	'breadcrumbs' => [
 		['title' => 'Главная', 'url' => '/'],

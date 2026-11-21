@@ -33,6 +33,7 @@ $this->start('page');
 	'icon' => $feed['icon'],
 	'loader' => feed_loader($feedKey),
 	'name' => 'feed-' . $feedKey,
+	'total' => $total,
 	'breadcrumbs' => [
 		['title' => 'Главная', 'url' => '/'],
 		['title' => $feed['title'], 'url' => null],

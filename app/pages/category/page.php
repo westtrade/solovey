@@ -29,6 +29,7 @@ $this->start('page');
 	'lead' => $description,
 	'loader' => feed_loader(null, (int) $category['id']),
 	'name' => 'category-' . $slug,
+	'total' => $total,
 	'breadcrumbs' => [
 		['title' => 'Главная', 'url' => '/'],
 		['title' => $category['title'], 'url' => null],

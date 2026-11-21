@@ -32,6 +32,7 @@ $this->start('page');
 	'icon' => 'tag',
 	'loader' => feed_loader(null, null, null, (int) $tag['id']),
 	'name' => 'tag-' . $slug,
+	'total' => $total,
 	'showFeedsTabs' => false,
 	'breadcrumbs' => [
 		['title' => 'Главная', 'url' => '/'],
