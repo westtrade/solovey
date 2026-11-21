@@ -45,7 +45,7 @@ $this->start('page');
 		Ищем по заголовкам, лидам и текстам. Можно ввести тему, район или название источника.
 	</p>
 
-	<form action="/poisk" method="get" role="search" class="mt-5">
+	<form action="/poisk" method="get" role="search" aria-label="Поиск по архиву" class="mt-5">
 		<div class="relative">
 			<label for="q" class="sr-only">Поисковый запрос</label>
 			<?= $this->insert('bolt://ui-kit/icon', ['name' => 'search', 'size' => 18, 'class' => 'pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-muted']) ?>
@@ -82,6 +82,8 @@ $this->start('page');
 		</p>
 
 		<?php if ($total > 0): ?>
+			<h2 class="sr-only">Найденные материалы</h2>
+
 			<div class="mt-4 divide-y divide-line">
 				<?= $this->insert('bolt://ui-kit/pagination', [
 					'name' => 'search-results',

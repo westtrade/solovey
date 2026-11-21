@@ -27,8 +27,7 @@ if ($description === '') {
 	$description = mb_substr(trim(strip_tags((string) $article['body'])), 0, 200) . '…';
 }
 
-$schema = [
-	'@context' => 'https://schema.org',
+$news = [
 	'@type' => 'NewsArticle',
 	'headline' => (string) $article['title'],
 	'description' => $description,
@@ -51,12 +50,29 @@ $schema = [
 ];
 
 if ($cover !== '') {
-	$schema['image'] = [app_absolute_url(image_url($cover, 'og'))];
+	$news['image'] = [app_absolute_url(image_url($cover, 'og'))];
 }
 
 if ($tags !== []) {
-	$schema['keywords'] = implode(', ', array_map(static fn (array $t): string => (string) $t['title'], $tags));
+	$news['keywords'] = implode(', ', array_map(static fn (array $t): string => (string) $t['title'], $tags));
 }
+
+// Крошки — второй элемент графа: путь в поиске Google строится по нему.
+$crumbs = [
+	'@type' => 'BreadcrumbList',
+	'itemListElement' => [
+		['@type' => 'ListItem', 'position' => 1, 'name' => 'Главная', 'item' => app_absolute_url('/')],
+		[
+			'@type' => 'ListItem',
+			'position' => 2,
+			'name' => (string) $article['category_title'],
+			'item' => app_absolute_url('/' . $article['category_slug']),
+		],
+		['@type' => 'ListItem', 'position' => 3, 'name' => (string) $article['title']],
+	],
+];
+
+$schema = ['@context' => 'https://schema.org', '@graph' => [$news, $crumbs]];
 
 $this->layout('_app://components/layout/main', [
 	'title' => (string) $article['title'],

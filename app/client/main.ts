@@ -50,40 +50,36 @@ Alpine.data('siteHeader', () => ({
 }));
 
 /**
- * Поиск: панель открывается по кнопке и по «/», фокус ставится в поле.
+ * Поиск: «/» ставит фокус в поле, как в почте и трекерах.
+ *
+ * Компонент висит на форме, поэтому `$refs.field` — своё поле, а не первое
+ * найденное в документе. В полях ввода и в модификаторах сочетание не
+ * перехватываем: там «/» — обычный символ.
  */
-Alpine.data('searchPanel', () => ({
-	open: false,
-
+Alpine.data('searchShortcut', () => ({
 	init(): void {
 		window.addEventListener('keydown', (event: KeyboardEvent) => {
+			if (event.key !== '/' || event.metaKey || event.ctrlKey || event.altKey) {
+				return;
+			}
+
 			const target = event.target as HTMLElement | null;
-			const typing = target !== null && /^(INPUT|TEXTAREA|SELECT)$/.test(target.tagName);
 
-			if (event.key === '/' && !typing) {
-				event.preventDefault();
-				this.show();
+			if (target !== null && /^(INPUT|TEXTAREA|SELECT)$/.test(target.tagName)) {
+				return;
 			}
 
-			if (event.key === 'Escape') {
-				this.hide();
+			const refs = (this as unknown as { $refs?: Record<string, HTMLInputElement> }).$refs;
+			const field = refs?.field;
+
+			if (field === undefined) {
+				return;
 			}
+
+			event.preventDefault();
+			field.focus();
+			field.select();
 		});
-	},
-
-	show(): void {
-		this.open = true;
-
-		requestAnimationFrame(() => {
-			const refs = (this as unknown as { $refs?: Record<string, HTMLElement> }).$refs;
-			const field = refs?.field as HTMLInputElement | undefined;
-			field?.focus();
-			field?.select();
-		});
-	},
-
-	hide(): void {
-		this.open = false;
 	},
 }));
 

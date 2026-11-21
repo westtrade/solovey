@@ -22,7 +22,7 @@
 	--color-paper-3: #e7dfd2;
 	--color-ink: #17130f;
 	--color-ink-soft: #453c33;
-	--color-muted: #7b7064;
+	--color-muted: #6b6055;
 	--color-line: #ddd4c6;
 	--color-line-strong: #c9bda9;
 	--color-brand: #0f5c4d;
@@ -51,6 +51,11 @@
 		background-image:
 			radial-gradient(circle at 1px 1px, rgb(23 19 15 / 0.035) 1px, transparent 0);
 		background-size: 22px 22px;
+	}
+
+	/* Alpine: до инициализации скрываем то, что покажется по x-show. */
+	[x-cloak] {
+		display: none !important;
 	}
 
 	::selection {

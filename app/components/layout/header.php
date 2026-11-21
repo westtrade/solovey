@@ -16,7 +16,7 @@ $stats = site_stats();
 $today = (new DateTimeImmutable('now'))->format('c');
 ?>
 
-<div x-data="siteHeader" class="sticky top-0 z-40">
+<header x-data="siteHeader" class="sticky top-0 z-40">
 
 	<?php // ─── Служебная строка ─────────────────────────────────────── ?>
 	<div class="hidden border-b border-line/70 bg-paper/85 backdrop-blur sm:block">
@@ -48,7 +48,7 @@ $today = (new DateTimeImmutable('now'))->format('c');
 			<?php // ─── Брендовая строка ─────────────────────────────────── ?>
 			<div class="flex items-center gap-4 py-3">
 
-				<a href="/" class="group flex shrink-0 items-center gap-2.5" aria-label="Соловей — на главную">
+				<a href="/" class="group flex shrink-0 items-center gap-2.5">
 					<span class="flex h-10 w-10 items-center justify-center rounded-xl bg-ink text-paper transition-transform duration-300 group-hover:-rotate-6">
 						<?= $this->insert('bolt://ui-kit/icon', ['name' => 'bird', 'size' => 22]) ?>
 					</span>
@@ -59,12 +59,13 @@ $today = (new DateTimeImmutable('now'))->format('c');
 				</a>
 
 				<?php // Поиск: на десктопе поле, на мобильном — кнопка-панель. ?>
-				<form action="/poisk" method="get" role="search" class="ml-auto hidden w-full max-w-sm items-center gap-2 md:flex">
+				<form action="/poisk" method="get" role="search" aria-label="Поиск по сайту" x-data="searchShortcut" class="ml-auto hidden w-full max-w-sm items-center gap-2 md:flex">
 					<label for="q-desktop" class="sr-only">Поиск по сайту</label>
 					<div class="relative flex-1">
 						<?= $this->insert('bolt://ui-kit/icon', ['name' => 'search', 'size' => 15, 'class' => 'pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-muted']) ?>
 						<input
 							id="q-desktop"
+							x-ref="field"
 							type="search"
 							name="q"
 							value="<?= e((string) ($_GET['q'] ?? '')) ?>"
@@ -211,4 +212,4 @@ $today = (new DateTimeImmutable('now'))->format('c');
 
 		</div>
 	</div>
-</div>
+</header>

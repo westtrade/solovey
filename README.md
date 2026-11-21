@@ -85,6 +85,20 @@ live_stream(14);                                     // алерты + свеж�
 Карточка рендерится функцией `article_card($article, 'hero')` с вариантами
 `hero`, `default`, `row`, `plain` — один шаблон на все ленты.
 
+## Особенности интеграции с Bolt
+
+- Схема бандла для каталога `app/` — `_app://`, а не `app://`: так его
+  регистрирует `Bundle::SYSTEM_NAME`. Поэтому шаблоны подключаются как
+  `_app://components/...`, а в `icons.sources` стоит `_app://icons`.
+- `hx-select-oob` в htmx 2 принимает **id**, а не селектор
+  (`fragment.querySelector('#' + id)`), поэтому `bolt://ui-kit/pagination`
+  с его `[data-pagination-more="…"]` роняет загрузку «Показать ещё».
+  Свой триггер — `pagination_trigger()` в `app/data/pagination.php` —
+  подставляет id контейнера `pagination-<name>-container`.
+- Имя секции `content` в Plates зарезервировано, макет использует `page`.
+- `$this->insert()` печатает сразу, поэтому карточка — функция
+  `article_card()`, а не шаблон: внутри замыканий `$this` недоступен.
+
 ## Ошибки
 
 Символьные коды — в `src/Support/ErrorCodes.php`, проверка — `make errors-check`.

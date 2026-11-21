@@ -78,6 +78,8 @@ if (!is_callable($loader)) {
 				</nav>
 			<?php endif; ?>
 
+			<h2 class="sr-only">Материалы: <?= e($title) ?></h2>
+
 			<?= $this->insert('bolt://ui-kit/pagination', [
 				'name' => $name,
 				'loader' => $loader,
@@ -87,16 +89,7 @@ if (!is_callable($loader)) {
 				'item' => static function (array $attrs, array $meta): void {
 					echo article_card($attrs, 'default', ['id' => $attrs['id'], 'class' => $attrs['class']]);
 				},
-				'trigger' => static function (array $items): void {
-					foreach ($items as $item) {
-						$attrs = $item['attrs'] ?? [];
-						$attrs['class'] = clsx(
-							$attrs['class'] ?? null,
-							'group mx-auto flex w-full max-w-xs items-center justify-center gap-2 rounded-full border border-line bg-white/70 px-5 py-2.5 text-sm font-medium text-ink-soft transition-colors hover:border-brand/40 hover:text-brand',
-						);
-						echo '<div class="col-span-full mt-2"><a ' . attrs($attrs) . '><span>Показать ещё</span></a></div>';
-					}
-				},
+				'trigger' => pagination_trigger(),
 			]) ?>
 
 			<p class="mt-6 text-xs text-muted">
