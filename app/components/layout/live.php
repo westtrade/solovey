@@ -23,14 +23,15 @@ $lead ??= 'Оперативные сообщения и свежие матер�
 $rows = live_stream($limit);
 ?>
 
-<aside class="<?= e(clsx('rounded-2xl border border-line bg-white/70', $sticky ? 'lg:sticky lg:top-28' : null)) ?>" aria-labelledby="live-title">
-	<div class="flex items-center gap-2 border-b border-line px-4 py-3">
+<aside class="<?= e(clsx('overflow-hidden rounded-2xl border border-line bg-white/70', $sticky ? 'lg:sticky lg:top-28' : null)) ?>" aria-labelledby="live-title">
+	<?php // Чернильная шапка: колонка читается как «прямая линия», а не ещё одна карточка. ?>
+	<div class="flex items-center gap-2 bg-ink px-4 py-3">
 		<span class="relative inline-flex h-2 w-2">
 			<span class="absolute inset-0 rounded-full bg-alert animate-ping [animation-duration:1.9s]"></span>
 			<span class="relative inline-flex h-2 w-2 rounded-full bg-alert"></span>
 		</span>
-		<h2 id="live-title" class="text-sm font-semibold uppercase tracking-[0.12em] text-ink"><?= e($title) ?></h2>
-		<a href="/lenta" class="ml-auto inline-flex items-center gap-1 text-[11px] font-medium text-muted transition-colors hover:text-brand">
+		<h2 id="live-title" class="text-sm font-semibold text-paper"><?= e($title) ?></h2>
+		<a href="/lenta" class="ml-auto inline-flex items-center gap-1 text-xs font-medium text-paper/60 transition-colors hover:text-paper">
 			Вся лента
 			<?= $this->insert('bolt://ui-kit/icon', ['name' => 'arrow-right', 'size' => 12]) ?>
 		</a>
@@ -38,17 +39,18 @@ $rows = live_stream($limit);
 
 	<p class="sr-only"><?= e($lead) ?></p>
 
-	<ol class="divide-y divide-line/70">
+	<?php // На телефоне колонка превращается в горизонтальную ленту: вертикальный список уводил её на 6 экранов вниз. ?>
+	<ol class="flex snap-x snap-mandatory divide-y-0 overflow-x-auto no-scrollbar lg:block lg:divide-y lg:divide-line/70">
 		<?php foreach ($rows as $row): ?>
 			<?php if ($row['is_alert']): ?>
-				<li class="relative bg-alert-soft/50 px-4 py-3">
+				<li class="relative w-64 shrink-0 snap-start border-r border-line/70 bg-alert-soft/50 px-4 py-3 lg:w-auto lg:border-r-0">
 					<div class="flex items-start gap-2.5">
 						<span class="mt-0.5 text-alert">
 							<?= $this->insert('bolt://ui-kit/icon', ['name' => 'alert', 'size' => 15]) ?>
 						</span>
 						<div class="min-w-0">
 							<p class="text-[13px] font-medium leading-snug text-alert"><?= e($row['title']) ?></p>
-							<p class="mt-1 flex items-center gap-1.5 text-[11px] text-alert/70">
+							<p class="mt-1 flex items-center gap-1.5 text-xs text-alert/70">
 								<time datetime="<?= e($row['iso']) ?>"><?= e($row['time_label']) ?></time>
 								<?php if (($row['source'] ?? '') !== ''): ?>
 									<span aria-hidden="true">·</span>
@@ -59,7 +61,7 @@ $rows = live_stream($limit);
 					</div>
 				</li>
 			<?php else: ?>
-				<li>
+				<li class="w-64 shrink-0 snap-start border-r border-line/70 lg:w-auto lg:border-r-0">
 					<a href="<?= e($row['url']) ?>" class="group flex items-start gap-3 px-4 py-3 transition-colors hover:bg-paper-2/60">
 						<time datetime="<?= e($row['iso']) ?>" class="w-10 shrink-0 pt-0.5 font-mono text-[11px] text-muted"><?= e($row['time_label']) ?></time>
 
@@ -74,7 +76,7 @@ $rows = live_stream($limit);
 								<span class="<?= link_underline() ?>"><?= e($row['title']) ?></span>
 							</span>
 							<?php if (($row['source'] ?? '') !== ''): ?>
-								<span class="mt-1 block truncate text-[11px] text-muted"><?= e($row['source']) ?></span>
+								<span class="mt-1 block truncate text-xs text-muted"><?= e($row['source']) ?></span>
 							<?php endif; ?>
 						</span>
 					</a>

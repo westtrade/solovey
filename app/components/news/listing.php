@@ -44,15 +44,15 @@ if (!is_callable($loader)) {
 	<div class="grid gap-8 lg:grid-cols-[minmax(0,1fr)_20rem] lg:gap-10">
 		<div class="min-w-0">
 
-			<header class="mb-5">
+			<header class="mb-6 border-b-2 border-ink/85 pb-4">
 				<div class="flex items-center gap-2.5">
 					<?php if ($icon !== null): ?>
-						<span class="flex h-9 w-9 items-center justify-center rounded-xl bg-ink text-paper">
+						<span class="flex h-10 w-10 items-center justify-center rounded-lg bg-ink text-paper">
 							<?= $this->insert('bolt://ui-kit/icon', ['name' => $icon, 'size' => 18]) ?>
 						</span>
 					<?php endif; ?>
 
-					<h1 class="font-display text-2xl leading-tight text-ink sm:text-3xl"><?= e($title) ?></h1>
+					<h1 class="font-display text-3xl leading-tight text-ink sm:text-4xl"><?= e($title) ?></h1>
 				</div>
 
 				<?php if ($lead !== null): ?>
@@ -67,7 +67,7 @@ if (!is_callable($loader)) {
 						<a
 							href="<?= e($feed['url']) ?>"
 							class="<?= e(clsx(
-								'flex shrink-0 items-center gap-1.5 whitespace-nowrap rounded-full border px-3 py-1.5 text-xs font-medium transition-colors',
+								'flex shrink-0 items-center gap-1.5 whitespace-nowrap rounded-lg border px-3 py-1.5 text-xs font-medium transition-colors',
 								nav_active($feed['url'])
 									? 'border-ink bg-ink text-paper'
 									: 'border-line bg-white/60 text-ink-soft hover:border-line-strong hover:text-ink',
@@ -80,16 +80,21 @@ if (!is_callable($loader)) {
 				</nav>
 			<?php endif; ?>
 
+			<?php // На телефоне лента «Сейчас» идёт сразу после переключателя, а не в подвале страницы. ?>
+			<div class="mb-6 lg:hidden">
+				<?= $this->insert('_app://components/layout/live', ['limit' => 8, 'sticky' => false]) ?>
+			</div>
+
 			<?php if ($total === 0): ?>
 				<?php // Пустая подборка: вместо сетки и кнопки — объяснение и выход. ?>
-				<div class="rounded-2xl border border-dashed border-line bg-white/50 px-6 py-14 text-center">
+				<div class="rounded-xl border border-dashed border-line bg-white/50 px-6 py-14 text-center">
 					<span class="mx-auto flex h-11 w-11 items-center justify-center rounded-full bg-paper-2 text-muted">
 						<?= $this->insert('bolt://ui-kit/icon', ['name' => 'grid', 'size' => 18]) ?>
 					</span>
 					<p class="mt-4 font-display text-lg text-ink">Здесь пока пусто</p>
 					<p class="mx-auto mt-1.5 max-w-sm text-sm leading-relaxed text-muted"><?= e($empty) ?></p>
 					<div class="mt-5 flex flex-wrap items-center justify-center gap-2">
-						<a href="/lenta" class="inline-flex items-center gap-1.5 rounded-full bg-ink px-4 py-2 text-xs font-medium text-paper transition-colors hover:bg-ink-soft">
+						<a href="/lenta" class="inline-flex items-center gap-1.5 rounded-lg bg-ink px-4 py-2 text-xs font-medium text-paper transition-colors hover:bg-ink-soft">
 							<?= $this->insert('bolt://ui-kit/icon', ['name' => 'list', 'size' => 13]) ?>
 							Вся лента
 						</a>
@@ -115,7 +120,7 @@ if (!is_callable($loader)) {
 			<?php endif; ?>
 		</div>
 
-		<div class="min-w-0">
+		<div class="hidden min-w-0 lg:block">
 			<?= $this->insert('_app://components/layout/live', ['limit' => 14]) ?>
 		</div>
 	</div>

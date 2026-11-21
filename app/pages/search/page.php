@@ -111,10 +111,10 @@ $this->start('page');
 
 	<?php // Подсказки: свежие темы и рубрики — чтобы поиск не был пустым полем. ?>
 	<section class="mt-10">
-		<h2 class="text-[11px] font-semibold uppercase tracking-[0.14em] text-muted">Частые темы</h2>
+		<h2 class="text-xs font-medium text-muted">Частые темы</h2>
 		<div class="mt-3 flex flex-wrap gap-2">
 			<?php foreach (tags_popular(10) as $tag): ?>
-				<a href="<?= e($tag['url']) ?>" class="rounded-full border border-line bg-white/60 px-3 py-1.5 text-xs text-ink-soft transition-colors hover:border-brand/40 hover:text-brand">
+				<a href="<?= e($tag['url']) ?>" class="rounded-lg border border-line bg-white/60 px-3 py-1.5 text-xs text-ink-soft transition-colors hover:border-brand/40 hover:text-brand">
 					<?= e($tag['title']) ?>
 				</a>
 			<?php endforeach; ?>
@@ -122,10 +122,10 @@ $this->start('page');
 	</section>
 
 	<section class="mt-8">
-		<h2 class="text-[11px] font-semibold uppercase tracking-[0.14em] text-muted">Рубрики</h2>
+		<h2 class="text-xs font-medium text-muted">Рубрики</h2>
 		<div class="mt-3 flex flex-wrap gap-2">
 			<?php foreach (categories_all() as $category): ?>
-				<a href="<?= e($category['url']) ?>" class="flex items-center gap-2 rounded-full border border-line bg-white/60 px-3 py-1.5 text-xs text-ink-soft transition-colors hover:border-brand/40 hover:text-brand">
+				<a href="<?= e($category['url']) ?>" class="flex items-center gap-2 rounded-lg border border-line bg-white/60 px-3 py-1.5 text-xs text-ink-soft transition-colors hover:border-brand/40 hover:text-brand">
 					<span class="<?= e(clsx('h-1.5 w-1.5 rounded-full', accent_classes($category['accent'])['dot'])) ?>"></span>
 					<?= e($category['title']) ?>
 				</a>

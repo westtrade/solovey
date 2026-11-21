@@ -64,28 +64,31 @@ function article_card(array $article, string $variant = 'default', array $attrib
 	};
 
 	if ($variant === 'hero') {
+		// Тёмная правая панель: единственный крупный контрастный блок на
+		// главной. Фотография даёт материал, чернила — вес заголовку.
 		return $wrapper
 			. '<a href="' . e($url) . '" class="block">'
-			. '<div class="grid gap-0 overflow-hidden rounded-2xl border border-line bg-white/80 transition duration-200 hover:-translate-y-0.5 hover:border-line-strong hover:shadow-lift md:grid-cols-[1.15fr_1fr]">'
-			. '<div class="relative aspect-[16/10] overflow-hidden bg-paper-2 md:aspect-auto md:min-h-[22rem]">'
+			. '<div class="grid gap-0 overflow-hidden rounded-xl border border-ink bg-ink transition duration-200 hover:-translate-y-0.5 hover:shadow-lift md:grid-cols-[1.1fr_1fr]">'
+			. '<div class="relative aspect-[16/10] overflow-hidden bg-paper-2 md:aspect-auto md:min-h-[26rem]">'
 			. $media('cover', '1200', '750', true)
-			. '<span class="absolute left-3 top-3 rounded-full px-2.5 py-1 text-[11px] font-semibold uppercase tracking-wide ring-1 ' . e($accent['badge']) . '">'
+			. '<span class="absolute left-3 top-3 inline-flex items-center gap-1.5 rounded-lg bg-ink/85 px-2.5 py-1 text-[11px] font-semibold text-paper backdrop-blur-sm">'
+			. '<span class="h-1.5 w-1.5 rounded-full ' . e($accent['dot']) . '"></span>'
 			. e((string) ($article['category_title'] ?? '')) . '</span>'
 			. '</div>'
 			. '<div class="flex flex-col justify-between p-5 sm:p-6">'
 			. '<div>'
-			. '<div class="flex flex-wrap items-center gap-2 text-xs text-muted">'
-			. '<span class="font-medium text-ink-soft">' . e((string) ($article['time_group'] ?? '')) . '</span>'
+			. '<div class="flex flex-wrap items-center gap-2 text-xs text-paper/55">'
+			. '<span class="font-medium text-brand-light">' . e((string) ($article['time_group'] ?? '')) . '</span>'
 			. '<span aria-hidden="true">·</span>'
-			. '<time datetime="' . e($iso) . '">' . e($time) . '</time>'
+			. '<time datetime="' . e($iso) . '" class="font-mono">' . e($time) . '</time>'
 			. '<span aria-hidden="true">·</span>'
 			. '<span class="inline-flex items-center gap-1">' . icon_svg('clock', 12) . e((string) $minutes) . ' мин</span>'
 			. '</div>'
-			. '<h2 class="mt-3 font-display text-2xl leading-tight text-ink sm:text-3xl">'
+			. '<h2 class="mt-3 font-display text-[1.7rem] leading-[1.15] text-paper sm:text-4xl">'
 			. '<span class="' . link_underline() . '">' . e($title) . '</span></h2>'
-			. ($showLead && $lead !== '' ? '<p class="mt-3 line-clamp-3 text-sm leading-relaxed text-ink-soft">' . e($lead) . '</p>' : '')
+			. ($showLead && $lead !== '' ? '<p class="mt-3 line-clamp-3 text-sm leading-relaxed text-paper/70">' . e($lead) . '</p>' : '')
 			. '</div>'
-			. '<div class="mt-5 flex items-center gap-2 text-xs text-muted">'
+			. '<div class="mt-5 flex items-center gap-2 border-t border-paper/15 pt-3 text-xs text-paper/55">'
 			. ($source !== '' ? '<span class="truncate">' . e($source) . '</span><span aria-hidden="true">·</span>' : '')
 			. '<span class="inline-flex items-center gap-1">' . icon_svg('eye', 12) . e($views) . '</span>'
 			. '</div>'
@@ -102,7 +105,7 @@ function article_card(array $article, string $variant = 'default', array $attrib
 					. '</div>'
 				: '')
 			. '<div class="min-w-0 flex-1">'
-			. '<div class="flex items-center gap-1.5 text-[11px] text-muted">'
+			. '<div class="flex items-center gap-1.5 text-xs text-muted">'
 			. '<time datetime="' . e($iso) . '">' . e($time) . '</time>'
 			. '<span aria-hidden="true" class="h-1 w-1 rounded-full ' . e($accent['dot']) . '"></span>'
 			. '<span class="truncate">' . e((string) ($article['category_title'] ?? '')) . '</span>'
@@ -123,13 +126,14 @@ function article_card(array $article, string $variant = 'default', array $attrib
 	}
 
 	return $wrapper
-		. '<a href="' . e($url) . '" data-rise class="flex h-full flex-col overflow-hidden rounded-2xl border border-line bg-white/80 transition duration-200 hover:-translate-y-0.5 hover:border-line-strong hover:shadow-lift">'
+		. '<a href="' . e($url) . '" data-rise class="flex h-full flex-col overflow-hidden rounded-xl border border-line bg-white transition duration-200 hover:-translate-y-0.5 hover:border-line-strong hover:shadow-lift">'
 		. '<div class="relative aspect-[16/10] overflow-hidden bg-paper-2">'
 		. $media('card', '640', '400')
-		. '<span class="absolute left-3 top-3 rounded-full px-2.5 py-1 text-[11px] font-semibold ring-1 ' . e($accent['badge']) . '">'
+		. '<span class="absolute left-3 top-3 inline-flex items-center gap-1.5 rounded-lg bg-ink/85 px-2 py-1 text-[11px] font-semibold text-paper backdrop-blur-sm">'
+		. '<span class="h-1.5 w-1.5 rounded-full ' . e($accent['dot']) . '"></span>'
 		. e((string) ($article['category_title'] ?? '')) . '</span>'
 		. ($flagLabel !== null
-			? '<span class="absolute right-3 top-3 inline-flex items-center gap-1 rounded-full bg-paper/85 px-2.5 py-1 text-[11px] font-semibold text-ink ring-1 ring-ink/10 backdrop-blur-sm">'
+			? '<span class="absolute right-3 top-3 inline-flex items-center gap-1 rounded-md bg-paper/90 px-2 py-1 text-[11px] font-semibold text-ink ring-1 ring-ink/10 backdrop-blur-sm">'
 				. icon_svg((string) $flagIcon, 12, 'text-alert') . e($flagLabel) . '</span>'
 			: '')
 		. '</div>'
@@ -141,7 +145,7 @@ function article_card(array $article, string $variant = 'default', array $attrib
 		. '</div>'
 		. '<h3 class="mt-1.5 font-display text-lg leading-snug text-ink"><span class="' . link_underline() . '">' . e($title) . '</span></h3>'
 		. ($showLead && $lead !== '' ? '<p class="mt-2 line-clamp-2 text-[13px] leading-relaxed text-ink-soft/90">' . e($lead) . '</p>' : '')
-		. '<div class="mt-auto flex items-center justify-between gap-2 pt-3 text-[11px] text-muted">'
+		. '<div class="mt-auto flex items-center justify-between gap-2 pt-3 text-xs text-muted">'
 		. '<span class="truncate">' . e($source) . '</span>'
 		. '<span class="inline-flex shrink-0 items-center gap-1">' . icon_svg('eye', 11) . e($views) . '</span>'
 		. '</div></div></a>'

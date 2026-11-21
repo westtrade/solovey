@@ -28,6 +28,8 @@
 	--color-brand: #0f5c4d;
 	--color-brand-dark: #0a453a;
 	--color-brand-soft: #dfeee9;
+	/* Светлый вариант акцента: только для текста на чернильных плашках. */
+	--color-brand-light: #7cc7b1;
 	--color-alert: #b42318;
 	--color-alert-soft: #fdeceb;
 	--color-gold: #b06f00;

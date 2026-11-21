@@ -49,13 +49,13 @@ $hint = $hints[$code] ?? 'Попробуйте вернуться на глав�
 <body class="flex min-h-screen flex-col items-center justify-center bg-paper px-4 text-ink antialiased">
 	<main class="w-full max-w-lg">
 		<a href="/" class="inline-flex items-center gap-2.5">
-			<span class="flex h-10 w-10 items-center justify-center rounded-xl bg-ink text-paper">
+			<span class="flex h-10 w-10 items-center justify-center rounded-lg bg-ink text-paper">
 				<?= icon_svg('bird', 22) ?>
 			</span>
 			<span class="font-display text-xl">Соловей</span>
 		</a>
 
-		<p class="mt-10 font-display text-6xl leading-none tracking-tight text-ink/15"><?= e((string) $code) ?></p>
+		<p class="mt-10 font-display text-7xl leading-none tracking-tight text-ink/12"><?= e((string) $code) ?></p>
 		<h1 class="mt-3 font-display text-2xl leading-tight text-ink"><?= e($title) ?></h1>
 		<p class="mt-3 text-sm leading-relaxed text-ink-soft"><?= e($message) ?></p>
 		<p class="mt-2 text-sm leading-relaxed text-muted"><?= e($hint) ?></p>
@@ -65,13 +65,13 @@ $hint = $hints[$code] ?? 'Попробуйте вернуться на глав�
 		<?php endif; ?>
 
 		<div class="mt-8 flex flex-wrap gap-2">
-			<a href="/" class="rounded-full bg-ink px-4 py-2 text-sm font-medium text-paper transition-colors hover:bg-brand-dark">
+			<a href="/" class="rounded-lg bg-ink px-4 py-2 text-sm font-medium text-paper transition-colors hover:bg-brand-dark">
 				На главную
 			</a>
-			<a href="/lenta" class="rounded-full border border-line bg-white px-4 py-2 text-sm font-medium text-ink-soft transition-colors hover:border-line-strong hover:text-ink">
+			<a href="/lenta" class="rounded-lg border border-line bg-white px-4 py-2 text-sm font-medium text-ink-soft transition-colors hover:border-line-strong hover:text-ink">
 				Лента новостей
 			</a>
-			<a href="/poisk" class="rounded-full border border-line bg-white px-4 py-2 text-sm font-medium text-ink-soft transition-colors hover:border-line-strong hover:text-ink">
+			<a href="/poisk" class="rounded-lg border border-line bg-white px-4 py-2 text-sm font-medium text-ink-soft transition-colors hover:border-line-strong hover:text-ink">
 				Поиск
 			</a>
 		</div>

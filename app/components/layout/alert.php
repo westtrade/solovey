@@ -24,7 +24,7 @@ if ($alert === null) {
 		</span>
 
 		<p class="flex-1 text-sm leading-snug text-alert">
-			<span class="font-semibold uppercase tracking-wide">Срочно.</span>
+			<span class="font-semibold">Срочно.</span>
 			<?= e($alert['title']) ?>
 		</p>
 

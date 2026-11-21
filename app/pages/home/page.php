@@ -65,19 +65,23 @@ $this->layout('_app://components/layout/main', [
 			<?php // ─── Главное за сутки ─────────────────────────────── ?>
 			<?php if ($hero !== null): ?>
 				<section aria-labelledby="hero-title">
-					<div class="mb-4 flex items-center gap-2">
-						<span class="inline-flex items-center gap-1.5 rounded-full bg-ink px-2.5 py-1 text-[11px] font-semibold uppercase tracking-[0.12em] text-paper">
-							<?= $this->insert('bolt://ui-kit/icon', ['name' => 'flame', 'size' => 12]) ?>
+					<div class="mb-3 flex items-center gap-3">
+						<h2 id="hero-title" class="inline-flex items-center gap-1.5 text-xs font-semibold text-ink">
+							<span class="text-alert"><?= $this->insert('bolt://ui-kit/icon', ['name' => 'flame', 'size' => 13]) ?></span>
 							Главное за сутки
-						</span>
-						<span class="h-px flex-1 bg-line" aria-hidden="true"></span>
+						</h2>
+						<span class="h-0.5 flex-1 bg-ink/85" aria-hidden="true"></span>
+						<span class="hidden font-mono text-xs text-muted sm:block"><?= e(ru_date(date('c'))) ?></span>
 					</div>
-
-					<h2 id="hero-title" class="sr-only">Главное за сутки</h2>
 
 					<?= article_card($hero, 'hero') ?>
 				</section>
 			<?php endif; ?>
+
+			<?php // На телефоне колонка «Сейчас» стоит сразу после главного: иначе до неё шесть экранов. ?>
+			<div class="mt-6 lg:hidden">
+				<?= $this->insert('_app://components/layout/live', ['limit' => 8, 'sticky' => false]) ?>
+			</div>
 
 			<?php // ─── Рубрики ───────────────────────────────────────── ?>
 			<section class="mt-10" aria-labelledby="categories-title">
@@ -88,11 +92,10 @@ $this->layout('_app://components/layout/main', [
 						<?php $accent = accent_classes($category['accent']); ?>
 						<a
 							href="<?= e($category['url']) ?>"
-							class="group flex flex-col gap-1 rounded-xl border border-line bg-white/60 px-3 py-2.5 transition-all duration-200 hover:-translate-y-0.5 hover:border-line-strong hover:shadow-[var(--shadow-card)]"
+							class="group flex items-baseline justify-between gap-2 rounded-lg border border-line bg-white/60 px-3 py-2 transition-colors duration-200 hover:border-ink hover:bg-ink"
 						>
-							<span class="<?= e(clsx('h-1.5 w-6 rounded-full transition-all duration-300 group-hover:w-9', $accent['dot'])) ?>"></span>
-							<span class="mt-0.5 text-[13px] font-medium leading-tight text-ink"><?= e($category['title']) ?></span>
-							<span class="text-[11px] text-muted"><?= e(compact_number($category['total'])) ?></span>
+							<span class="text-[13px] font-medium leading-tight text-ink transition-colors group-hover:text-paper"><?= e($category['title']) ?></span>
+							<span class="font-mono text-xs tabular-nums text-muted transition-colors group-hover:text-paper/60"><?= e(compact_number($category['total'])) ?></span>
 						</a>
 					<?php endforeach; ?>
 				</div>
@@ -100,7 +103,7 @@ $this->layout('_app://components/layout/main', [
 
 			<?php // ─── Лента ─────────────────────────────────────────── ?>
 			<section class="mt-10" aria-labelledby="latest-title">
-				<div class="mb-5 flex items-end justify-between gap-4 border-b border-line pb-3">
+				<div class="mb-5 flex items-end justify-between gap-4 border-b-2 border-ink/85 pb-2.5">
 					<div>
 						<h2 id="latest-title" class="font-display text-xl text-ink sm:text-2xl">Последние новости</h2>
 						<p class="mt-1.5 text-xs text-muted">Обновляется по мере выхода материалов</p>
@@ -128,13 +131,15 @@ $this->layout('_app://components/layout/main', [
 
 			<?php // ─── Важное ────────────────────────────────────────── ?>
 			<?php if ($important !== []): ?>
-				<section class="mt-10" aria-labelledby="important-title">
+				<?php // Чернильная плашка: вторая контрастная точка страницы после шапки. ?>
+				<section class="mt-10 rounded-xl bg-ink p-5 sm:p-6" aria-labelledby="important-title">
 					<?= $this->insert('_app://components/ui/section-head', [
 						'title' => 'Важное',
 						'lead' => 'Материалы, на которые стоит обратить внимание',
 						'href' => '/hot',
 						'linkLabel' => 'Все важное',
 						'icon' => 'flame',
+						'tone' => 'dark',
 					]) ?>
 
 					<h2 id="important-title" class="sr-only">Важное</h2>
@@ -149,7 +154,7 @@ $this->layout('_app://components/layout/main', [
 		</div>
 
 		<?php // ─── Правая колонка ───────────────────────────────────── ?>
-		<div class="min-w-0">
+		<div class="hidden min-w-0 lg:block">
 			<?= $this->insert('_app://components/layout/live', ['limit' => 14]) ?>
 		</div>
 	</div>

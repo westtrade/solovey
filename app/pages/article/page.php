@@ -109,18 +109,18 @@ $this->start('page');
 					<div class="flex flex-wrap items-center gap-2">
 						<a
 							href="/<?= e((string) $article['category_slug']) ?>"
-							class="<?= e(clsx('rounded-full px-2.5 py-1 text-[11px] font-semibold ring-1 transition-opacity hover:opacity-80', accent_classes((string) $article['category_accent'])['badge'])) ?>"
-						><?= e((string) $article['category_title']) ?></a>
+							class="inline-flex items-center gap-1.5 rounded-lg bg-ink px-2.5 py-1 text-xs font-semibold text-paper transition-opacity hover:opacity-85"
+						><span class="h-1.5 w-1.5 rounded-full <?= e(accent_classes((string) $article['category_accent'])['dot']) ?>"></span><?= e((string) $article['category_title']) ?></a>
 
 						<?php if ((bool) $article['is_important']): ?>
-							<span class="inline-flex items-center gap-1 rounded-full bg-alert-soft px-2.5 py-1 text-[11px] font-semibold text-alert">
+							<span class="inline-flex items-center gap-1 rounded-md bg-alert-soft px-2.5 py-1 text-xs font-semibold text-alert">
 								<?= $this->insert('bolt://ui-kit/icon', ['name' => 'flame', 'size' => 12]) ?>
 								Важно
 							</span>
 						<?php endif; ?>
 
 						<?php if ((bool) $article['is_longread']): ?>
-							<span class="inline-flex items-center gap-1 rounded-full bg-paper-2 px-2.5 py-1 text-[11px] font-semibold text-ink-soft">
+							<span class="inline-flex items-center gap-1 rounded-md bg-paper-2 px-2.5 py-1 text-xs font-semibold text-ink-soft">
 								<?= $this->insert('bolt://ui-kit/icon', ['name' => 'book', 'size' => 12]) ?>
 								Лонгрид
 							</span>
@@ -186,22 +186,22 @@ $this->start('page');
 
 				<?php if ($source !== null && (string) $source['title'] !== ''): ?>
 					<div class="mt-8 flex flex-wrap items-center gap-3 rounded-xl border border-line bg-paper-2/50 px-4 py-3 text-sm">
-						<span class="text-xs uppercase tracking-[0.12em] text-muted">Источник</span>
+						<span class="text-xs text-muted">Источник</span>
 						<a href="<?= e((string) $source['url']) ?>" class="group inline-flex items-center gap-1.5 font-medium text-ink transition-colors hover:text-brand">
 							<?= e((string) $source['title']) ?>
 							<span class="transition-transform duration-200 group-hover:translate-x-0.5">
 								<?= $this->insert('bolt://ui-kit/icon', ['name' => 'external', 'size' => 13]) ?>
 							</span>
 						</a>
-						<span class="rounded-full bg-white px-2 py-0.5 text-[11px] text-muted"><?= e((string) $source['kind_label']) ?></span>
+						<span class="rounded-md bg-white px-2 py-0.5 text-[11px] text-muted"><?= e((string) $source['kind_label']) ?></span>
 					</div>
 				<?php endif; ?>
 
 				<?php if ($tags !== []): ?>
 					<div class="mt-6 flex flex-wrap items-center gap-2">
-						<span class="text-xs uppercase tracking-[0.12em] text-muted">Темы</span>
+						<span class="text-xs text-muted">Темы</span>
 						<?php foreach ($tags as $tag): ?>
-							<a href="<?= e((string) $tag['url']) ?>" class="rounded-full border border-line bg-white/60 px-3 py-1 text-xs text-ink-soft transition-colors hover:border-brand/40 hover:text-brand">
+							<a href="<?= e((string) $tag['url']) ?>" class="rounded-lg border border-line bg-white/60 px-3 py-1 text-xs text-ink-soft transition-colors hover:border-brand/40 hover:text-brand">
 								<?= e((string) $tag['title']) ?>
 							</a>
 						<?php endforeach; ?>
@@ -210,7 +210,7 @@ $this->start('page');
 
 				<?php // Кнопки соцсетей: прямые ссылки, без трекеров. ?>
 				<div class="mt-8 rounded-2xl border border-line bg-white/60 p-4">
-					<p class="text-xs font-semibold uppercase tracking-[0.12em] text-muted">Рассказать</p>
+					<p class="text-xs font-medium text-muted">Рассказать</p>
 					<div class="mt-3 flex flex-wrap gap-2">
 						<?php
 						$shareUrl = rawurlencode($absolute);
@@ -226,7 +226,7 @@ $this->start('page');
 								href="<?= e($network['href']) ?>"
 								target="_blank"
 								rel="noopener noreferrer"
-								class="inline-flex items-center gap-2 rounded-full border border-line px-3.5 py-2 text-xs font-medium text-ink-soft transition-colors hover:border-brand/40 hover:text-brand"
+								class="inline-flex items-center gap-2 rounded-lg border border-line px-3.5 py-2 text-xs font-medium text-ink-soft transition-colors hover:border-brand/40 hover:text-brand"
 							>
 								<?= $this->insert('bolt://ui-kit/icon', ['name' => $network['icon'], 'size' => 14]) ?>
 								<?= e($network['title']) ?>
@@ -237,7 +237,7 @@ $this->start('page');
 							type="button"
 							x-data="shareButton('<?= e($absolute) ?>', '<?= e((string) $article['title']) ?>')"
 							@click="share()"
-							class="inline-flex items-center gap-2 rounded-full border border-line px-3.5 py-2 text-xs font-medium text-ink-soft transition-colors hover:border-brand/40 hover:text-brand"
+							class="inline-flex items-center gap-2 rounded-lg border border-line px-3.5 py-2 text-xs font-medium text-ink-soft transition-colors hover:border-brand/40 hover:text-brand"
 						>
 							<?= $this->insert('bolt://ui-kit/icon', ['name' => 'link', 'size' => 14]) ?>
 							<span x-show="!copied">Скопировать ссылку</span>
@@ -251,7 +251,7 @@ $this->start('page');
 					<nav class="mt-8 grid gap-3 sm:grid-cols-2" aria-label="Соседние материалы">
 						<?php if ($neighbours['prev'] !== null): ?>
 							<a href="<?= e((string) $neighbours['prev']['url']) ?>" class="group rounded-xl border border-line bg-white/60 p-4 transition-colors hover:border-line-strong">
-								<span class="flex items-center gap-1.5 text-[11px] uppercase tracking-[0.12em] text-muted">
+								<span class="flex items-center gap-1.5 text-xs text-muted">
 									<?= $this->insert('bolt://ui-kit/icon', ['name' => 'arrow-left', 'size' => 12]) ?>
 									Предыдущий материал
 								</span>
@@ -263,7 +263,7 @@ $this->start('page');
 
 						<?php if ($neighbours['next'] !== null): ?>
 							<a href="<?= e((string) $neighbours['next']['url']) ?>" class="group rounded-xl border border-line bg-white/60 p-4 text-right transition-colors hover:border-line-strong sm:col-start-2">
-								<span class="flex items-center justify-end gap-1.5 text-[11px] uppercase tracking-[0.12em] text-muted">
+								<span class="flex items-center justify-end gap-1.5 text-xs text-muted">
 									Следующий материал
 									<?= $this->insert('bolt://ui-kit/icon', ['name' => 'arrow-right', 'size' => 12]) ?>
 								</span>

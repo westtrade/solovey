@@ -19,25 +19,25 @@ $today = (new DateTimeImmutable('now'))->format('c');
 <header x-data="siteHeader" class="sticky top-0 z-40">
 
 	<?php // ─── Служебная строка ─────────────────────────────────────── ?>
-	<div class="hidden border-b border-line/70 bg-paper/85 backdrop-blur sm:block">
-		<div class="mx-auto flex max-w-7xl items-center gap-3 px-4 py-1.5 text-[11px] font-medium uppercase tracking-[0.14em] text-muted">
-			<time datetime="<?= e($today) ?>" class="text-ink-soft"><?= e(ru_date($today)) ?></time>
-			<span aria-hidden="true" class="h-1 w-1 rounded-full bg-line-strong"></span>
+	<div class="hidden bg-ink sm:block">
+		<div class="mx-auto flex max-w-7xl items-center gap-3 px-4 py-1.5 text-xs text-paper/60">
+			<time datetime="<?= e($today) ?>" class="text-paper/85"><?= e(ru_date($today)) ?></time>
+			<span aria-hidden="true" class="h-1 w-1 rounded-full bg-paper/25"></span>
 			<span class="flex items-center gap-1.5">
-				<?= $this->insert('bolt://ui-kit/icon', ['name' => 'pin', 'size' => 12, 'class' => 'text-muted']) ?>
+				<?= $this->insert('bolt://ui-kit/icon', ['name' => 'pin', 'size' => 12, 'class' => 'text-paper/45']) ?>
 				Курск
 			</span>
 
 			<span class="ml-auto flex items-center gap-4">
-				<span class="flex items-center gap-1.5 text-brand">
+				<span class="flex items-center gap-1.5 text-brand-light">
 					<span class="relative inline-flex h-1.5 w-1.5">
-						<span class="absolute inset-0 rounded-full bg-brand animate-ping [animation-duration:1.9s]"></span>
-						<span class="relative inline-flex h-1.5 w-1.5 rounded-full bg-brand"></span>
+						<span class="absolute inset-0 rounded-full bg-brand-light animate-ping [animation-duration:1.9s]"></span>
+						<span class="relative inline-flex h-1.5 w-1.5 rounded-full bg-brand-light"></span>
 					</span>
 					<?= e(ru_count($stats['today'], 'новость', 'новости', 'новостей')) ?> за сутки
 				</span>
-				<a href="/rss.xml" class="transition-colors hover:text-ink">RSS</a>
-				<a href="/o-nas" class="transition-colors hover:text-ink">О проекте</a>
+				<a href="/rss.xml" class="transition-colors hover:text-paper">RSS</a>
+				<a href="/o-nas" class="transition-colors hover:text-paper">О проекте</a>
 			</span>
 		</div>
 	</div>
@@ -49,12 +49,12 @@ $today = (new DateTimeImmutable('now'))->format('c');
 			<div class="flex items-center gap-4 py-3">
 
 				<a href="/" class="group flex shrink-0 items-center gap-2.5">
-					<span class="flex h-10 w-10 items-center justify-center rounded-xl bg-ink text-paper transition-transform duration-300 group-hover:-rotate-6">
+					<span class="flex h-10 w-10 items-center justify-center rounded-lg bg-ink text-paper transition-transform duration-300 group-hover:-rotate-6">
 						<?= $this->insert('bolt://ui-kit/icon', ['name' => 'bird', 'size' => 22]) ?>
 					</span>
 					<span class="leading-none">
 						<span class="block font-display text-2xl tracking-tight text-ink">Соловей</span>
-						<span class="mt-1 block text-[10px] font-medium uppercase tracking-[0.18em] text-muted">Курск и область</span>
+						<span class="mt-1 block text-[11px] text-muted">Курск и область</span>
 					</span>
 				</a>
 
@@ -71,7 +71,7 @@ $today = (new DateTimeImmutable('now'))->format('c');
 							value="<?= e((string) ($_GET['q'] ?? '')) ?>"
 							placeholder="Найти новость, тему, источник"
 							autocomplete="off"
-							class="w-full rounded-full border border-line bg-white/70 py-2 pl-9 pr-16 text-sm text-ink placeholder:text-muted/80 transition-colors focus:border-brand focus:bg-white focus:outline-none focus:ring-2 focus:ring-brand/15"
+							class="w-full rounded-lg border border-line bg-white/70 py-2 pl-9 pr-16 text-sm text-ink placeholder:text-muted/80 transition-colors focus:border-brand focus:bg-white focus:outline-none focus:ring-2 focus:ring-brand/15"
 						>
 						<kbd class="pointer-events-none absolute right-2.5 top-1/2 hidden -translate-y-1/2 rounded border border-line bg-paper-2 px-1.5 py-0.5 font-mono text-[10px] text-muted lg:block">/</kbd>
 					</div>
@@ -81,7 +81,7 @@ $today = (new DateTimeImmutable('now'))->format('c');
 				<div class="ml-auto flex items-center gap-1 md:ml-0">
 					<a
 						href="/rss.xml"
-						class="hidden h-9 w-9 items-center justify-center rounded-full text-muted transition-colors hover:bg-paper-2 hover:text-ink sm:flex"
+						class="hidden h-10 w-10 items-center justify-center rounded-lg text-muted transition-colors hover:bg-paper-2 hover:text-ink sm:flex"
 						title="RSS-лента"
 						aria-label="RSS-лента"
 					>
@@ -90,7 +90,7 @@ $today = (new DateTimeImmutable('now'))->format('c');
 
 					<button
 						type="button"
-						class="flex h-9 w-9 items-center justify-center rounded-full text-ink transition-colors hover:bg-paper-2 md:hidden"
+						class="flex h-10 w-10 items-center justify-center rounded-lg text-ink transition-colors hover:bg-paper-2 md:hidden"
 						@click="menuOpen = !menuOpen"
 						:aria-expanded="menuOpen"
 						aria-controls="mobile-menu"
@@ -109,7 +109,7 @@ $today = (new DateTimeImmutable('now'))->format('c');
 				<a
 					href="/"
 					class="<?= e(clsx(
-						'rounded-full px-3 py-1.5 text-sm font-medium transition-colors',
+						'rounded-lg px-3 py-1.5 text-sm font-medium transition-colors',
 						current_path() === '/' ? 'bg-ink text-paper' : 'text-ink-soft hover:bg-paper-2 hover:text-ink',
 					)) ?>"
 				>Главная</a>
@@ -118,7 +118,7 @@ $today = (new DateTimeImmutable('now'))->format('c');
 					<a
 						href="<?= e($feed['url']) ?>"
 						class="<?= e(clsx(
-							'items-center gap-1.5 whitespace-nowrap rounded-full px-3 py-1.5 text-sm transition-colors',
+							'items-center gap-1.5 whitespace-nowrap rounded-lg px-3 py-1.5 text-sm transition-colors',
 							feed_nav_class($feed['nav']),
 							nav_active($feed['url']) ? 'bg-ink text-paper' : 'text-ink-soft hover:bg-paper-2 hover:text-ink',
 						)) ?>"
@@ -134,7 +134,7 @@ $today = (new DateTimeImmutable('now'))->format('c');
 				<div class="relative" x-data="{ open: false }" @keydown.escape.window="open = false">
 					<button
 						type="button"
-						class="flex items-center gap-1.5 whitespace-nowrap rounded-full px-3 py-1.5 text-sm text-ink-soft transition-colors hover:bg-paper-2 hover:text-ink"
+						class="flex items-center gap-1.5 whitespace-nowrap rounded-lg px-3 py-1.5 text-sm text-ink-soft transition-colors hover:bg-paper-2 hover:text-ink"
 						@click="open = !open"
 						:aria-expanded="open"
 						aria-controls="categories-panel"
@@ -193,16 +193,16 @@ $today = (new DateTimeImmutable('now'))->format('c');
 				<div class="grid grid-cols-2 gap-1">
 					<a href="/" class="rounded-xl px-3 py-2 text-sm font-medium text-ink hover:bg-paper-2">Главная</a>
 					<?php foreach ($feeds as $feed): ?>
-						<a href="<?= e($feed['url']) ?>" class="rounded-xl px-3 py-2 text-sm text-ink-soft hover:bg-paper-2 hover:text-ink">
+						<a href="<?= e($feed['url']) ?>" class="rounded-lg px-3 py-2 text-sm text-ink-soft transition-colors hover:bg-paper-2 hover:text-ink">
 							<?= e($feed['title']) ?>
 						</a>
 					<?php endforeach; ?>
 				</div>
 
-				<p class="mt-4 px-3 text-[11px] font-medium uppercase tracking-[0.14em] text-muted">Рубрики</p>
+				<p class="mt-4 px-3 text-xs font-medium text-muted">Рубрики</p>
 				<div class="mt-1 grid grid-cols-2 gap-1">
 					<?php foreach ($categories as $category): ?>
-						<a href="<?= e($category['url']) ?>" class="flex items-center gap-2 rounded-xl px-3 py-2 text-sm text-ink-soft hover:bg-paper-2 hover:text-ink">
+						<a href="<?= e($category['url']) ?>" class="flex items-center gap-2 rounded-lg px-3 py-2 text-sm text-ink-soft transition-colors hover:bg-paper-2 hover:text-ink">
 							<span class="<?= e(clsx('h-1.5 w-1.5 rounded-full', accent_classes($category['accent'])['dot'])) ?>"></span>
 							<?= e($category['title']) ?>
 						</a>
