@@ -115,6 +115,35 @@ def clean_body(body, art_id, title):
     return body.strip(), images
 
 
+def body_text(body: str, title: str) -> str:
+    """Связный текст статьи: абзацы через пробел, без повтора заголовка.
+
+    Теги разделяют абзацы, но не текст внутри них, поэтому простой strip_tags
+    склеивал соседние абзацы: «…уровнеПредседатель…». Первый абзац часто
+    дословно повторяет заголовок — в лиде он лишний.
+    """
+    parts = []
+    for m in re.finditer(r"<(?:p|li|h2|h3)\b[^>]*>(.*?)</(?:p|li|h2|h3)>", body, re.S | re.I):
+        text = strip_tags(m.group(1))
+        text = htmllib.unescape(text)
+        text = re.sub(r"\s+", " ", text).strip()
+        if not text:
+            continue
+        if not parts and normalize(text) == normalize(title):
+            continue
+        parts.append(text)
+    if not parts:
+        return re.sub(r"\s+", " ", strip_tags(body)).strip()
+    return " ".join(parts)
+
+
+def normalize(text: str) -> str:
+    text = re.sub(r"\s+", " ", text).strip().lower()
+    for ch in "«»“”\"":
+        text = text.replace(ch, "")
+    return text
+
+
 def parse_article(url):
     try:
         page = fetch(url)
@@ -149,8 +178,8 @@ def parse_article(url):
         body = m.group(1) if m else ""
 
     body, images = clean_body(body, art_id, title)
-    text = strip_tags(body)
-    lead = text[:320].rsplit(" ", 1)[0] + "…" if len(text) > 320 else text
+    text = body_text(body, title)
+    lead = text[:300].rsplit(" ", 1)[0] + "…" if len(text) > 300 else text
 
     return {
         "id": art_id,

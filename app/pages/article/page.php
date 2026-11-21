@@ -181,7 +181,7 @@ $this->start('page');
 				<?php endif; ?>
 
 				<div class="prose-news mt-6">
-					<?= article_body((string) $article['body']) ?>
+					<?= article_body((string) $article['body'], (string) $article['title']) ?>
 				</div>
 
 				<?php if ($source !== null && (string) $source['title'] !== ''): ?>

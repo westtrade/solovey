@@ -228,7 +228,11 @@ foreach ($snapshot['articles'] as $article) {
 	}
 
 	$body = (string) ($article['body'] ?? '');
-	$lead = trim((string) ($article['lead'] ?? ''));
+
+	// Лид и время чтения считаем из тела статьи: в снимке текст склеен
+	// («…уровнеПредседатель…») и содержит повтор заголовка первым абзацем.
+	$plain = article_plain($body, $title);
+	$lead = $plain !== '' ? article_lead($body, $title) : trim((string) ($article['lead'] ?? ''));
 	$url = (string) ($article['url'] ?? '');
 	$feed = (string) ($article['feed'] ?? 'all');
 	$rawSource = (string) ($article['source'] ?? '');
@@ -257,7 +261,7 @@ foreach ($snapshot['articles'] as $article) {
 		'cover' => (string) ($article['cover'] ?? ''),
 		'published_at' => $publishedAt,
 		'views' => 200 + (crc32($id . 'views') % 9000),
-		'reading_time' => reading_minutes((string) ($article['text'] ?? $body)),
+		'reading_time' => reading_minutes($plain !== '' ? $plain : (string) ($article['text'] ?? $body)),
 		'is_top' => isset($feedUrls['top'][$url]) || $feed === 'top',
 		'is_important' => isset($feedUrls['hot'][$url]) || $feed === 'hot',
 		'is_video' => isset($feedUrls['video'][$url]) || in_array($feed, ['video', 'photo'], true),

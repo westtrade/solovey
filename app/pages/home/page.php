@@ -87,12 +87,13 @@ $this->layout('_app://components/layout/main', [
 			<section class="mt-10" aria-labelledby="categories-title">
 				<h2 id="categories-title" class="sr-only">Рубрики</h2>
 
-				<div class="grid grid-cols-2 gap-2 sm:grid-cols-4 lg:grid-cols-7">
+				<?php // Чипы по ширине содержимого: в жёсткой сетке «Происшествия 17» не влезали. ?>
+				<div class="flex flex-wrap gap-2">
 					<?php foreach ($categories as $category): ?>
 						<?php $accent = accent_classes($category['accent']); ?>
 						<a
 							href="<?= e($category['url']) ?>"
-							class="group flex items-baseline justify-between gap-2 rounded-lg border border-line bg-white/60 px-3 py-2 transition-colors duration-200 hover:border-ink hover:bg-ink"
+							class="group inline-flex items-baseline gap-2 rounded-lg border border-line bg-white/60 px-3 py-2 transition-colors duration-200 hover:border-ink hover:bg-ink"
 						>
 							<span class="text-[13px] font-medium leading-tight text-ink transition-colors group-hover:text-paper"><?= e($category['title']) ?></span>
 							<span class="font-mono text-xs tabular-nums text-muted transition-colors group-hover:text-paper/60"><?= e(compact_number($category['total'])) ?></span>

@@ -211,10 +211,28 @@ function icon_svg(string $name, int $size = 18, string $class = ''): string
  * поэтому каждый `<img>` переписывается на `/convert-image/...?preset=body`
  * и получает ленивую загрузку.
  */
-function article_body(string $html): string
+function article_body(string $html, ?string $title = null): string
 {
 	if ($html === '') {
 		return '';
+	}
+
+	// Первый абзац часто повторяет заголовок слово в слово — сразу под <h1>
+	// это выглядит как дубль. Убираем ровно один такой абзац.
+	if ($title !== null && $title !== '') {
+		$needle = plain_fold($title);
+
+		$html = (string) preg_replace_callback(
+			'~^\s*((?:<figure\b.*?</figure>\s*)*)<p\b[^>]*>(.*?)</p>~is',
+			static function (array $m) use ($needle): string {
+				$text = plain_fold($m[2]);
+
+				// Фигуру оставляем на месте — выбрасываем только сам абзац.
+				return $text === $needle ? $m[1] : $m[0];
+			},
+			$html,
+			1,
+		);
 	}
 
 	$result = preg_replace_callback(
@@ -234,6 +252,108 @@ function article_body(string $html): string
 	);
 
 	return $result ?? $html;
+}
+
+/**
+ * Сравнимый вид строки: без разметки, лишних пробелов и регистра.
+ */
+function plain_fold(string $text): string
+{
+	$text = utf8_clean($text);
+	$text = html_entity_decode(strip_tags($text), ENT_QUOTES | ENT_HTML5, 'UTF-8');
+	$text = (string) preg_replace('~\s+~u', ' ', $text);
+	$text = trim($text);
+	$text = str_replace(['«', '»', '“', '”', '"'], '', $text);
+
+	return mb_strtolower(utf8_clean($text), 'UTF-8');
+}
+
+/**
+ * Строка в валидном UTF-8.
+ *
+ * В исходных страницах попадаются битые последовательности (обрезка по
+ * байтам в windows-1251). Один такой байт валит json_encode всего снимка,
+ * поэтому чистим на входе, а не на выходе.
+ */
+function utf8_clean(string $text): string
+{
+	if ($text === '' || preg_match('//u', $text) === 1) {
+		return $text;
+	}
+
+	return (string) mb_scrub($text, 'UTF-8');
+}
+
+/**
+ * Чистый текст статьи: абзацы через пробел, без повтора заголовка.
+ *
+ * Исходные страницы отдают текст склеенным («…уровнеПредседатель…»), потому
+ * что абзацы разделены тегами, а не пробелами. Здесь абзацы собираются
+ * обратно в связный текст — он нужен и для лида, и для времени чтения.
+ */
+function article_plain(string $html, ?string $title = null): string
+{
+	if ($html === '') {
+		return '';
+	}
+
+	$needle = $title !== null && $title !== '' ? plain_fold($title) : '';
+	$parts = [];
+
+	if (preg_match_all('~<(p|li|h2|h3)\b[^>]*>(.*?)</\1>~is', $html, $matches, PREG_SET_ORDER)) {
+		foreach ($matches as $row) {
+			$text = trim((string) preg_replace('~\s+~u', ' ', html_entity_decode(strip_tags($row[2]), ENT_QUOTES | ENT_HTML5, 'UTF-8')));
+
+			if ($text === '') {
+				continue;
+			}
+
+			if ($parts === [] && $needle !== '' && plain_fold($text) === $needle) {
+				continue;
+			}
+
+			$parts[] = $text;
+		}
+	}
+
+	if ($parts === []) {
+		return utf8_clean(trim((string) preg_replace('~\s+~u', ' ', html_entity_decode(strip_tags(utf8_clean($html)), ENT_QUOTES | ENT_HTML5, 'UTF-8'))));
+	}
+
+	return utf8_clean(implode(' ', $parts));
+}
+
+/**
+ * Лид: начало текста статьи, обрезанное по границе слова.
+ */
+function article_lead(string $html, ?string $title = null, int $limit = 300): string
+{
+	$text = article_plain($html, $title);
+
+	if ($text === '') {
+		return '';
+	}
+
+	if (mb_strlen($text, 'UTF-8') <= $limit) {
+		return $text;
+	}
+
+	$text = ltrim($text, " —–-\t");
+
+	$cut = mb_substr($text, 0, $limit, 'UTF-8');
+	$space = mb_strrpos($cut, ' ', 0, 'UTF-8');
+
+	if ($space !== false && $space > $limit * 0.6) {
+		$cut = mb_substr($cut, 0, $space, 'UTF-8');
+	}
+
+	$cut = rtrim($cut, " \t.,;:—-");
+
+	// После выброшенного повтора заголовка лид может начинаться с тире —
+	// это хвост подзаголовка, а не начало фразы.
+	$cut = ltrim($cut, " —–-\t");
+
+	return $cut === '' ? '' : mb_strtoupper(mb_substr($cut, 0, 1, 'UTF-8'), 'UTF-8') . mb_substr($cut, 1, null, 'UTF-8') . '…';
 }
 
 /**
