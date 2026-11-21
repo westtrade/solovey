@@ -38,7 +38,8 @@ function pagination_trigger(string $label = 'Показать ещё'): callable
 				'[&.htmx-request]:pointer-events-none [&.htmx-request]:opacity-60',
 			);
 			?>
-			<div class="mt-7">
+			<?php // Кнопка по центру колонки: .pagination__more у Bolt идёт в потоке без своих полей. ?>
+			<div class="mt-7 flex justify-center">
 				<a <?= attrs($attrs) ?>>
 					<span><?= e($label) ?></span>
 					<span class="transition-transform duration-200 group-hover:translate-y-0.5"><?= icon_svg('chevron-down', 16) ?></span>
