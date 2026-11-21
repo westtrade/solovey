@@ -23,9 +23,9 @@ $lead ??= 'Оперативные сообщения и свежие матер�
 $rows = live_stream($limit);
 ?>
 
-<aside class="<?= e(clsx('overflow-hidden rounded-2xl border border-line bg-white/70', $sticky ? 'lg:sticky lg:top-28' : null)) ?>" aria-labelledby="live-title">
+<aside class="<?= e(clsx('overflow-hidden rounded-2xl border border-line bg-white/70', $sticky ? 'lg:sticky lg:top-[calc(var(--header-h)_+_1.25rem)] lg:flex lg:max-h-[calc(100dvh-var(--header-h)-2.5rem)] lg:flex-col' : null)) ?>" aria-labelledby="live-title">
 	<?php // Чернильная шапка: колонка читается как «прямая линия», а не ещё одна карточка. ?>
-	<div class="flex items-center gap-2 bg-ink px-4 py-3">
+	<div class="flex shrink-0 items-center gap-2 bg-ink px-4 py-3">
 		<span class="relative inline-flex h-2 w-2">
 			<span class="absolute inset-0 rounded-full bg-alert animate-ping [animation-duration:1.9s]"></span>
 			<span class="relative inline-flex h-2 w-2 rounded-full bg-alert"></span>
@@ -40,7 +40,9 @@ $rows = live_stream($limit);
 	<p class="sr-only"><?= e($lead) ?></p>
 
 	<?php // На телефоне колонка превращается в горизонтальную ленту: вертикальный список уводил её на 6 экранов вниз. ?>
-	<ol class="flex snap-x snap-mandatory divide-y-0 overflow-x-auto no-scrollbar lg:block lg:divide-y lg:divide-line/70">
+	<?php // На десктопе колонка закреплена и прокручивается внутри себя:
+	// иначе список выше экрана, и липкость не работает вовсе. ?>
+	<ol class="flex snap-x snap-mandatory divide-y-0 overflow-x-auto no-scrollbar lg:block lg:min-h-0 lg:flex-1 lg:divide-y lg:divide-line/70 lg:overflow-y-auto lg:overscroll-contain">
 		<?php foreach ($rows as $row): ?>
 			<?php if ($row['is_alert']): ?>
 				<li class="relative w-64 shrink-0 snap-start border-r border-line/70 bg-alert-soft/50 px-4 py-3 lg:w-auto lg:border-r-0">

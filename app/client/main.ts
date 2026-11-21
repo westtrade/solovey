@@ -21,26 +21,75 @@ declare global {
 window.Alpine = Alpine;
 window.htmx = htmx;
 
+/** Магия Alpine, которой нет в типе компонента. */
+type AlpineMagic = {
+	$el: HTMLElement;
+	$refs: Record<string, HTMLElement | undefined>;
+	$nextTick: (callback: () => void) => void;
+};
+
 /**
- * Шапка: фон появляется после прокрутки, мобильное меню закрывается по Esc.
+ * Шапка: сворачивается после прокрутки, мобильное меню закрывается по Esc,
+ * высота уходит в `--header-h`, чтобы колонка «Сейчас» вставала под шапку.
+ *
+ * `scrolled` — только фон. `compact` — свёрнутая шапка: на мобильном она не
+ * сворачивается никогда, иначе от шапки не осталось бы ни одной строки.
  */
 Alpine.data('siteHeader', () => ({
 	scrolled: false,
+	compact: false,
 	menuOpen: false,
+	searchOpen: false,
 
 	init(): void {
-		this.scrolled = window.scrollY > 8;
+		const wide = window.matchMedia('(min-width: 768px)');
 
-		const onScroll = (): void => {
+		const sync = (): void => {
 			this.scrolled = window.scrollY > 8;
+			this.compact = this.scrolled && wide.matches;
+
+			if (!this.scrolled) {
+				this.searchOpen = false;
+			}
 		};
 
-		window.addEventListener('scroll', onScroll, { passive: true });
+		sync();
+
+		window.addEventListener('scroll', sync, { passive: true });
+		wide.addEventListener('change', sync);
+
+		// Шапка меняет высоту при сворачивании — отступы зависят от неё.
+		new ResizeObserver(() => this.syncHeight()).observe((this as unknown as AlpineMagic).$el);
 
 		window.addEventListener('keydown', (event: KeyboardEvent) => {
 			if (event.key === 'Escape') {
 				this.menuOpen = false;
 			}
+		});
+
+		// «/» в свёрнутой шапке: поле брендовой строки скрыто, открываем панель.
+		window.addEventListener('solovey:search', () => {
+			if (this.compact) {
+				this.openSearch();
+			}
+		});
+	},
+
+	syncHeight(): void {
+		const height = Math.round((this as unknown as AlpineMagic).$el.getBoundingClientRect().height);
+		document.documentElement.style.setProperty('--header-h', `${height}px`);
+	},
+
+	openSearch(): void {
+		this.searchOpen = !this.searchOpen;
+
+		if (!this.searchOpen) {
+			return;
+		}
+
+		const magic = this as unknown as AlpineMagic;
+		magic.$nextTick(() => {
+			magic.$refs.compactField?.focus();
 		});
 	},
 
@@ -69,14 +118,18 @@ Alpine.data('searchShortcut', () => ({
 				return;
 			}
 
+			event.preventDefault();
+
 			const refs = (this as unknown as { $refs?: Record<string, HTMLInputElement> }).$refs;
 			const field = refs?.field;
 
-			if (field === undefined) {
+			// Поле есть, но шапка свёрнута — им нельзя пользоваться, просим панель.
+			if (field === undefined || field.closest('[inert]') !== null) {
+				window.dispatchEvent(new CustomEvent('solovey:search'));
+
 				return;
 			}
 
-			event.preventDefault();
 			field.focus();
 			field.select();
 		});
