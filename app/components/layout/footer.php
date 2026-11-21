@@ -55,7 +55,7 @@ $year = (int) date('Y');
 				<ul class="mt-3 space-y-1.5">
 					<?php foreach ($categories as $category): ?>
 						<li>
-							<a href="<?= e($category['url']) ?>" class="group inline-flex items-center gap-2 text-sm text-ink-soft transition-colors hover:text-ink">
+							<a href="<?= e($category['url']) ?>" class="group -mx-1 inline-flex items-center gap-2 rounded-lg px-1 py-1 text-sm text-ink-soft transition-colors hover:bg-paper-3/60 hover:text-ink">
 								<span class="<?= e(clsx('h-1.5 w-1.5 rounded-full transition-transform group-hover:scale-125', accent_classes($category['accent'])['dot'])) ?>"></span>
 								<?= e($category['title']) ?>
 							</a>

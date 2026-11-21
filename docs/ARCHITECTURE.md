@@ -217,7 +217,7 @@ app/client        — Tailwind + Alpine: табы, поиск, тема, про�
 | нет тем и источников | страницы `/tema/<slug>` и `/istochnik/<slug>`, теги в карточке |
 | карточка без контекста | время чтения, полоса прогресса, «Источник», связанное по теме, переходы «предыдущая/следующая» |
 | `<div onclick>` вместо ссылок | ссылки и кнопки, skip-link, `aria-*`, видимый фокус |
-| три CSS с чужого домена | один Tailwind-бандл (42 КБ → 8.8 КБ gzip), `/convert-image` + `srcset` + `fetchpriority` у LCP |
+| три CSS с чужого домена | один Tailwind-бандл (39 КБ → 8.5 КБ gzip), `/convert-image` + `srcset` + `fetchpriority` у LCP |
 | плоский sitemap | `sitemap.xml` с приоритетами и `lastmod`, RSS с `content:encoded` |
 | снимок в 61 МБ | исходники уменьшены до 44 МБ (`make media`), отдача через конвертер |
 
