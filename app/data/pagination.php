@@ -5,14 +5,12 @@ declare(strict_types=1);
 /**
  * Триггер «Показать ещё» для `bolt://ui-kit/pagination`.
  *
- * Зачем свой: `hx-select-oob` в htmx 2 принимает **id** элемента, а не
- * CSS-селектор (`fragment.querySelector('#' + id)`). Компонент Bolt кладёт
- * туда `[data-pagination-more="…"]`, и htmx падает с
- * `SyntaxError: '#[data-pagination-more=…]' is not a valid selector`.
- * Здесь атрибут заменяется на id контейнера, который компонент и так
- * печатает: `pagination-<name>-container`.
- *
- * Заодно задаём вид кнопки: компонент рисует её сам, но с классами `btn`.
+ * Своя реализация нужна только ради вида: компонент рисует голую ссылку с
+ * классами `btn`, а нам нужна пилюля с иконкой и состоянием загрузки.
+ * Атрибуты htmx (`hx-get`, `hx-target`, `hx-select`, `hx-swap`,
+ * `hx-select-oob`, `hx-indicator`) берём из компонента как есть — они
+ * рассчитаны на htmx 4, где `hx-select-oob` принимает CSS-селектор
+ * (`fragment.querySelectorAll(selector)`).
  */
 
 /**
@@ -27,12 +25,6 @@ function pagination_trigger(string $label = 'Показать ещё'): callable
 
 			if (!is_array($attrs)) {
 				continue;
-			}
-
-			$name = (string) ($attrs['data-pagination-button'] ?? '');
-
-			if ($name !== '') {
-				$attrs['hx-select-oob'] = 'pagination-' . $name . '-container';
 			}
 
 			$attrs['class'] = clsx(

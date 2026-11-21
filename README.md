@@ -19,7 +19,7 @@
 | Рендер | Bolt: Plates-шаблоны, `urlpatterns`, `bolt://ui-kit/seo`, `bolt://ui-kit/pagination`, спрайт иконок, `/convert-image` |
 | Модель | CakePHP ORM 5.4: таблицы, сущности с геттерами, finder'ы |
 | База | SQLite (`database/solovey.sqlite`) |
-| Интерфейс | Tailwind 4, Alpine.js 3, htmx 2, Vite 8 |
+| Интерфейс | Tailwind 4, Alpine.js 3, htmx 4, Vite 8 |
 | Данные | снимок `kursk-news.net` → `database/snapshot.json` → сид |
 
 ## Быстрый старт
@@ -90,11 +90,15 @@ live_stream(14);                                     // алерты + свеж�
 - Схема бандла для каталога `app/` — `_app://`, а не `app://`: так его
   регистрирует `Bundle::SYSTEM_NAME`. Поэтому шаблоны подключаются как
   `_app://components/...`, а в `icons.sources` стоит `_app://icons`.
-- `hx-select-oob` в htmx 2 принимает **id**, а не селектор
-  (`fragment.querySelector('#' + id)`), поэтому `bolt://ui-kit/pagination`
-  с его `[data-pagination-more="…"]` роняет загрузку «Показать ещё».
-  Свой триггер — `pagination_trigger()` в `app/data/pagination.php` —
-  подставляет id контейнера `pagination-<name>-container`.
+- **htmx 4**, как требует Bolt: `client/vite-loader.ts` подписан на события
+  четвёрки (`htmx:before:request`, `htmx:after:swap`), а атрибуты пагинации
+  (`hx-select-oob` с CSS-селектором `[data-pagination-more="…"]`) рассчитаны
+  на `fragment.querySelectorAll(selector)`. На htmx 2 тот же атрибут падал
+  с `SyntaxError` — версия тут не косметика.
+- Свой триггер `pagination_trigger()` в `app/data/pagination.php` меняет
+  только вид кнопки; htmx-атрибуты берутся из компонента как есть.
+- Мост `hx-alpine-compat` не подключён: Alpine-компоненты живут в шапке и
+  карточке, а htmx подменяет только список карточек без Alpine-разметки.
 - Имя секции `content` в Plates зарезервировано, макет использует `page`.
 - `$this->insert()` печатает сразу, поэтому карточка — функция
   `article_card()`, а не шаблон: внутри замыканий `$this` недоступен.

@@ -138,11 +138,7 @@ Alpine.data('readingProgress', () => ({
  * htmx: сохраняем позицию прокрутки и не даём кнопке «Показать ещё» прыгать.
  * Плюс плавное появление догруженных карточек.
  */
-htmx.onLoad((root: Node) => {
-	if (!(root instanceof Element)) {
-		return;
-	}
-
+htmx.onLoad((root: Element) => {
 	root.querySelectorAll<HTMLElement>('[data-rise]').forEach((node, index) => {
 		node.classList.add('rise');
 		node.style.animationDelay = `${Math.min(index * 40, 240)}ms`;

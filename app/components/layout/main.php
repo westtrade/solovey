@@ -31,6 +31,8 @@ $bodyClass ??= '';
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta name="theme-color" content="#f7f4ef">
+	<?php // htmx 4: свои стили индикатора уже есть в main.css. ?>
+	<meta name="htmx-config" content='{"includeIndicatorCSS":false}'>
 
 	<?= $this->insert('bolt://ui-kit/seo', [
 		'title' => $title,
