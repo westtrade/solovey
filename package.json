@@ -1,0 +1,16 @@
+{
+	"name": "solovey",
+	"private": true,
+	"type": "module",
+	"description": "Соловей — новости Курска и области. Клиентские ассеты: Tailwind 4, Alpine, htmx.",
+	"dependencies": {
+		"alpinejs": "^3.15.12",
+		"htmx.org": "^2.0.4"
+	},
+	"devDependencies": {
+		"@tailwindcss/vite": "^4.3.5",
+		"tailwindcss": "^4.3.5",
+		"typescript": "^5.9.3",
+		"vite": "^8.3.8"
+	}
+}

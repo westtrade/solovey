@@ -1,0 +1,33 @@
+{
+    "name": "bsti/solovey",
+    "description": "Соловей — новости Курска и области. Bolt + CakePHP ORM.",
+    "type": "project",
+    "require": {
+        "php": ">=8.2",
+        "bsti/bolt": "*",
+        "cakephp/orm": "^5.2"
+    },
+    "repositories": [
+        {
+            "type": "path",
+            "url": "../bolt",
+            "options": { "symlink": true }
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Solovey\\": "src/"
+        },
+        "files": [
+            "app/support/helpers.php"
+        ]
+    },
+    "config": {
+        "sort-packages": true,
+        "allow-plugins": {
+            "composer/installers": true
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}

@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+# Установка зависимостей: PHP (composer) и клиентские (npm).
+#
+# composer берётся из PATH, а если его нет — из соседнего .scratch/.
+set -euo pipefail
+cd "$(dirname "$0")/.."
+
+if command -v composer > /dev/null 2>&1; then
+	composer install --no-interaction
+elif [ -f ../.scratch/composer.phar ]; then
+	php ../.scratch/composer.phar install --no-interaction
+else
+	echo "Нет composer: положите composer.phar в ../.scratch/ или установите глобально" >&2
+	exit 1
+fi
+
+npm install

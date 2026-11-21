@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+# Проверка проекта: синтаксис PHP, маршруты и иконки Bolt, коды ошибок.
+set -euo pipefail
+cd "$(dirname "$0")/.."
+
+fail=0
+
+while IFS= read -r file; do
+	if ! ./scripts/php -l "$file" > /dev/null; then
+		echo "Синтаксис: $file"
+		fail=1
+	fi
+done < <(find app src database scripts public -name '*.php' -type f | sort)
+
+./scripts/php vendor/bin/bolt check || fail=1
+./scripts/errors_check.php || fail=1
+
+if [ "$fail" -ne 0 ]; then
+	echo "Проверка не прошла"
+	exit 1
+fi
+
+echo "Проверка прошла"

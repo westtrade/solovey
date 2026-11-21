@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+# Режим разработки: Vite с HMR + PHP-сервер.
+#
+# Vite отдаёт ассеты на 127.0.0.1:5183, PHP-сервер — страницы на 127.0.0.1:8090.
+# При выходе (Ctrl+C) фоновый Vite гасится вместе с сервером.
+set -euo pipefail
+cd "$(dirname "$0")/.."
+
+./node_modules/.bin/vite &
+VITE_PID=$!
+trap 'kill "$VITE_PID" 2>/dev/null || true' EXIT INT TERM
+
+./scripts/serve

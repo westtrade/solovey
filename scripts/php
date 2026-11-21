@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+# PHP с расширениями SQLite: системный php собран без pdo_sqlite, поэтому
+# .so лежат в tools/php-ext и подключаются явно. Все цели Makefile ходят
+# через этот скрипт, чтобы не зависеть от php.ini окружения.
+set -euo pipefail
+cd "$(dirname "$0")/.."
+exec php \
+	-d extension="$PWD/tools/php-ext/pdo_sqlite.so" \
+	-d extension="$PWD/tools/php-ext/sqlite3.so" \
+	"$@"

@@ -1,0 +1,26 @@
+# Зависимости
+/vendor/
+/node_modules/
+
+# Сборка
+/public/build/
+/var/
+/public/assets/cache/
+
+# Локальное состояние
+/.scratch/
+/database/solovey.sqlite
+/database/solovey.sqlite-journal
+/database/solovey.sqlite-wal
+/database/solovey.sqlite-shm
+
+# Окружение
+.env
+.env.local
+
+# Мусор
+.DS_Store
+*.log
+
+# Локальный кэш npm (путь зависит от машины)
+.npmrc
