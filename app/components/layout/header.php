@@ -103,7 +103,9 @@ $today = (new DateTimeImmutable('now'))->format('c');
 			</div>
 
 			<?php // ─── Навигация ─────────────────────────────────────────── ?>
-			<nav class="hidden items-center gap-1 overflow-x-auto pb-2 md:flex no-scrollbar" aria-label="Ленты и рубрики">
+			<?php // Без overflow: прокрутка делала из nav scroll-контейнер и обрезала
+			// выпадающий список рубрик. Не влезающие ленты скрываются по брейкпоинтам. ?>
+			<nav class="hidden items-center gap-1 pb-2 md:flex" aria-label="Ленты и рубрики">
 				<a
 					href="/"
 					class="<?= e(clsx(
@@ -112,14 +114,12 @@ $today = (new DateTimeImmutable('now'))->format('c');
 					)) ?>"
 				>Главная</a>
 
-				<?php foreach ($feeds as $key => $feed): ?>
-					<?php if ($key === 'all') {
-						continue;
-					} ?>
+				<?php foreach ($feeds as $feed): ?>
 					<a
 						href="<?= e($feed['url']) ?>"
 						class="<?= e(clsx(
-							'flex items-center gap-1.5 whitespace-nowrap rounded-full px-3 py-1.5 text-sm transition-colors',
+							'items-center gap-1.5 whitespace-nowrap rounded-full px-3 py-1.5 text-sm transition-colors',
+							feed_nav_class($feed['nav']),
 							nav_active($feed['url']) ? 'bg-ink text-paper' : 'text-ink-soft hover:bg-paper-2 hover:text-ink',
 						)) ?>"
 					>
@@ -151,9 +151,9 @@ $today = (new DateTimeImmutable('now'))->format('c');
 						x-cloak
 						x-transition.opacity.duration.150ms
 						@click.outside="open = false"
-						class="absolute left-0 top-full z-50 mt-2 w-[min(34rem,calc(100vw-2rem))] rounded-2xl border border-line bg-white p-3 shadow-[var(--shadow-lift)]"
+						class="absolute right-0 top-full z-50 mt-2 w-[min(20rem,calc(100vw-2rem))] rounded-2xl border border-line bg-white p-3 shadow-[var(--shadow-lift)] lg:w-[min(34rem,calc(100vw-2rem))]"
 					>
-						<div class="grid grid-cols-2 gap-1">
+						<div class="grid grid-cols-1 gap-1 lg:grid-cols-2">
 							<?php foreach ($categories as $category): ?>
 								<?php $accent = accent_classes($category['accent']); ?>
 								<a
