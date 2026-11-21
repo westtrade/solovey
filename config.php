@@ -17,6 +17,18 @@ declare(strict_types=1);
 return [
 	'debug' => env('BOLT_DEBUG', env('APP_ENV', 'production') !== 'production'),
 
+	// ─── Адрес сайта ─────────────────────────────────────────────────
+	// `url` нужен для абсолютных canonical, og:url и og:image: без него
+	// Bolt оставляет их относительными. `allowed_hosts` — белый список
+	// хостов, которым верим при сборке абсолютного адреса из запроса.
+	'app' => [
+		'url' => (string) env('APP_URL', ''),
+		'allowed_hosts' => array_values(array_filter(array_map(
+			'trim',
+			explode(',', (string) env('APP_ALLOWED_HOSTS', 'localhost,localhost:8090,127.0.0.1,127.0.0.1:8090')),
+		))),
+	],
+
 	// ─── Маршруты ────────────────────────────────────────────────────
 	// Порядок важен: конкретные пути объявлены раньше рубрики-ловушки
 	// `<slug>` и раньше карточки `<cat>/<y>/<m>/<d>/<id>.html`.

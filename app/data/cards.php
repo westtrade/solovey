@@ -91,7 +91,7 @@ function article_card(array $article, string $variant = 'default', array $attrib
 
 	if ($variant === 'row') {
 		return $wrapper
-			. '<a href="' . e($url) . '" class="flex gap-3 rounded-xl p-1 transition-colors hover:bg-paper-2/70">'
+			. '<a href="' . e($url) . '" data-rise class="flex gap-3 rounded-xl p-1 transition-colors hover:bg-paper-2/70">'
 			. ($cover !== ''
 				? '<div class="card-media relative h-[4.5rem] w-[6rem] shrink-0 overflow-hidden rounded-lg">'
 					. '<img src="' . e(image_url($cover, 'row')) . '" alt="" width="200" height="130" loading="lazy" class="h-full w-full object-cover">'
@@ -119,7 +119,7 @@ function article_card(array $article, string $variant = 'default', array $attrib
 	}
 
 	return $wrapper
-		. '<a href="' . e($url) . '" class="flex h-full flex-col overflow-hidden rounded-2xl border border-line bg-white/80 card-lift">'
+		. '<a href="' . e($url) . '" data-rise class="flex h-full flex-col overflow-hidden rounded-2xl border border-line bg-white/80 card-lift">'
 		. '<div class="card-media relative aspect-[16/10]">'
 		. $media('card', '16/10', '640', '400')
 		. '<span class="absolute left-3 top-3 rounded-full px-2.5 py-1 text-[11px] font-semibold ring-1 ' . e($accent['badge']) . '">'

@@ -10,8 +10,13 @@ $slug = (string) ($routeParams['slug'] ?? $slug ?? '');
 $source = source_find($slug) ?? fail('source_not_found', ['slug' => $slug]);
 
 $total = (int) $source['total'];
+$sourceName = (string) $source['title'];
+// Названия приходят с кавычками («РИА «Курск»»), вторые вложенные — лишние.
+$sourceName = preg_match('/[«»"]/u', $sourceName) === 1
+	? trim(str_replace(['«', '»', '"'], '', $sourceName))
+	: $sourceName;
 $title = $source['title'] . ' — материалы';
-$description = 'Материалы источника «' . $source['title'] . '» (' . $source['kind_label'] . '): '
+$description = 'Материалы источника ' . $sourceName . ' (' . $source['kind_label'] . '): '
 	. ru_count($total, 'материал', 'материала', 'материалов') . '.';
 
 $this->layout('_app://components/layout/main', [
