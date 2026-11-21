@@ -79,7 +79,7 @@ $this->layout('_app://components/layout/main', [
 			<?php endif; ?>
 
 			<?php // На телефоне колонка «Сейчас» стоит сразу после главного: иначе до неё шесть экранов. ?>
-			<div class="mt-6 lg:hidden">
+			<div class="mt-6 min-w-0 lg:hidden">
 				<?= $this->insert('_app://components/layout/live', ['limit' => 8, 'sticky' => false]) ?>
 			</div>
 

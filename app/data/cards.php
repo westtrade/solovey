@@ -47,7 +47,7 @@ function article_card(array $article, string $variant = 'default', array $attrib
 	// Класс пагинации и класс карточки должны попасть в ОДИН атрибут class:
 	// два class на одном теге — невалидный HTML, и браузер берёт первый,
 	// из-за чего group-hover и подъём карточки молча не работают.
-	$attributes['class'] = clsx($attributes['class'] ?? null, 'group relative');
+	$attributes['class'] = clsx($attributes['class'] ?? null, 'group relative min-w-0');
 	$wrapper = '<article ' . attrs($attributes) . '>';
 	$wrapperEnd = '</article>';
 
@@ -71,7 +71,7 @@ function article_card(array $article, string $variant = 'default', array $attrib
 			. '<div class="grid gap-0 overflow-hidden rounded-xl border border-ink bg-ink transition duration-200 hover:-translate-y-0.5 hover:shadow-lift md:grid-cols-[1.1fr_1fr]">'
 			. '<div class="relative aspect-[16/10] overflow-hidden bg-paper-2 md:aspect-auto md:min-h-[26rem]">'
 			. $media('cover', '1200', '750', true)
-			. '<span class="absolute left-3 top-3 inline-flex items-center gap-1.5 rounded-md bg-ink/85 px-2 py-1 text-xs font-semibold text-paper backdrop-blur-sm">'
+			. '<span class="absolute left-3 top-3 inline-flex items-center gap-1.5 rounded-md bg-ink px-2 py-1 text-xs font-semibold text-paper">'
 			. '<span class="h-1.5 w-1.5 rounded-full ' . e($accent['dot']) . '"></span>'
 			. e((string) ($article['category_title'] ?? '')) . '</span>'
 			. '</div>'
@@ -126,10 +126,10 @@ function article_card(array $article, string $variant = 'default', array $attrib
 	}
 
 	return $wrapper
-		. '<a href="' . e($url) . '" data-rise class="flex h-full flex-col overflow-hidden rounded-xl border border-line bg-white transition duration-200 hover:-translate-y-0.5 hover:border-line-strong hover:shadow-lift">'
+		. '<a href="' . e($url) . '" data-rise class="flex h-full min-w-0 flex-col overflow-hidden rounded-xl border border-line bg-white transition duration-200 hover:-translate-y-0.5 hover:border-line-strong hover:shadow-lift">'
 		. '<div class="relative aspect-[16/10] overflow-hidden bg-paper-2">'
 		. $media('card', '640', '400')
-		. '<span class="absolute left-3 top-3 inline-flex items-center gap-1.5 rounded-md bg-ink/85 px-2 py-1 text-xs font-semibold text-paper backdrop-blur-sm">'
+		. '<span class="absolute left-3 top-3 inline-flex items-center gap-1.5 rounded-md bg-ink px-2 py-1 text-xs font-semibold text-paper">'
 		. '<span class="h-1.5 w-1.5 rounded-full ' . e($accent['dot']) . '"></span>'
 		. e((string) ($article['category_title'] ?? '')) . '</span>'
 		. ($flagLabel !== null

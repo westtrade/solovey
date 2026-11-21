@@ -29,48 +29,28 @@ type AlpineMagic = {
 };
 
 /**
- * Шапка: сворачивается после прокрутки, мобильное меню закрывается по Esc,
- * высота уходит в `--header-h`, чтобы колонка «Сейчас» вставала под шапку.
+ * Шапка: фон после прокрутки и мобильное меню по Esc.
  *
- * `scrolled` — только фон. `compact` — свёрнутая шапка: на мобильном она не
- * сворачивается никогда, иначе от шапки не осталось бы ни одной строки.
+ * Высота шапки уходит в `--header-h` — от неё считаются отступ липкой
+ * колонки «Сейчас» и `scroll-padding-top` у якорей.
  */
 Alpine.data('siteHeader', () => ({
 	scrolled: false,
-	compact: false,
 	menuOpen: false,
-	searchOpen: false,
 
 	init(): void {
-		const wide = window.matchMedia('(min-width: 768px)');
-
 		const sync = (): void => {
 			this.scrolled = window.scrollY > 8;
-			this.compact = this.scrolled && wide.matches;
-
-			if (!this.scrolled) {
-				this.searchOpen = false;
-			}
 		};
 
 		sync();
-
 		window.addEventListener('scroll', sync, { passive: true });
-		wide.addEventListener('change', sync);
 
-		// Шапка меняет высоту при сворачивании — отступы зависят от неё.
 		new ResizeObserver(() => this.syncHeight()).observe((this as unknown as AlpineMagic).$el);
 
 		window.addEventListener('keydown', (event: KeyboardEvent) => {
 			if (event.key === 'Escape') {
 				this.menuOpen = false;
-			}
-		});
-
-		// «/» в свёрнутой шапке: поле брендовой строки скрыто, открываем панель.
-		window.addEventListener('solovey:search', () => {
-			if (this.compact) {
-				this.openSearch();
 			}
 		});
 	},
@@ -80,30 +60,17 @@ Alpine.data('siteHeader', () => ({
 		document.documentElement.style.setProperty('--header-h', `${height}px`);
 	},
 
-	openSearch(): void {
-		this.searchOpen = !this.searchOpen;
-
-		if (!this.searchOpen) {
-			return;
-		}
-
-		const magic = this as unknown as AlpineMagic;
-		magic.$nextTick(() => {
-			magic.$refs.compactField?.focus();
-		});
-	},
-
 	toggleMenu(): void {
 		this.menuOpen = !this.menuOpen;
 	},
 }));
 
 /**
- * Поиск: «/» ставит фокус в поле, как в почте и трекерах.
+ * Поиск: «/» ставит фокус в поле — оно в шапке и видно всегда.
  *
  * Компонент висит на форме, поэтому `$refs.field` — своё поле, а не первое
- * найденное в документе. В полях ввода и в модификаторах сочетание не
- * перехватываем: там «/» — обычный символ.
+ * найденное в документе. В полях ввода и с модификаторами «/» не
+ * перехватываем: там это обычный символ.
  */
 Alpine.data('searchShortcut', () => ({
 	init(): void {
@@ -118,18 +85,13 @@ Alpine.data('searchShortcut', () => ({
 				return;
 			}
 
-			event.preventDefault();
+			const field = (this as unknown as AlpineMagic).$refs.field as HTMLInputElement | undefined;
 
-			const refs = (this as unknown as { $refs?: Record<string, HTMLInputElement> }).$refs;
-			const field = refs?.field;
-
-			// Поле есть, но шапка свёрнута — им нельзя пользоваться, просим панель.
-			if (field === undefined || field.closest('[inert]') !== null) {
-				window.dispatchEvent(new CustomEvent('solovey:search'));
-
+			if (field === undefined) {
 				return;
 			}
 
+			event.preventDefault();
 			field.focus();
 			field.select();
 		});

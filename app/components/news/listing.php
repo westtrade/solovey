@@ -81,7 +81,7 @@ if (!is_callable($loader)) {
 			<?php endif; ?>
 
 			<?php // На телефоне лента «Сейчас» идёт сразу после переключателя, а не в подвале страницы. ?>
-			<div class="mb-6 lg:hidden">
+			<div class="mb-6 min-w-0 lg:hidden">
 				<?= $this->insert('_app://components/layout/live', ['limit' => 8, 'sticky' => false]) ?>
 			</div>
 
