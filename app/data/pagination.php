@@ -27,17 +27,23 @@ function pagination_trigger(string $label = 'Показать ещё'): callable
 				continue;
 			}
 
+			// Отступ от сетки: контейнер .pagination__more у Bolt идёт без
+			// своих полей, поэтому обёртка с mt-7 живёт здесь, а не в CSS.
 			$attrs['class'] = clsx(
 				$attrs['class'] ?? null,
-				'group mx-auto flex w-full max-w-xs items-center justify-center gap-2 rounded-full',
+				'group flex w-full max-w-xs items-center justify-center gap-2 rounded-full',
 				'border border-line bg-white/70 px-5 py-2.5 text-sm font-medium text-ink-soft',
-				'transition-colors hover:border-brand/40 hover:text-brand',
+				'transition duration-200 hover:border-brand/40 hover:text-brand',
+				// Состояние загрузки htmx вешает на саму кнопку — красим вариантом.
+				'[&.htmx-request]:pointer-events-none [&.htmx-request]:opacity-60',
 			);
 			?>
-			<a <?= attrs($attrs) ?>>
-				<span><?= e($label) ?></span>
-				<span class="transition-transform duration-200 group-hover:translate-y-0.5"><?= icon_svg('chevron-down', 16) ?></span>
-			</a>
+			<div class="mt-7">
+				<a <?= attrs($attrs) ?>>
+					<span><?= e($label) ?></span>
+					<span class="transition-transform duration-200 group-hover:translate-y-0.5"><?= icon_svg('chevron-down', 16) ?></span>
+				</a>
+			</div>
 			<?php
 		}
 	};

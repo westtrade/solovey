@@ -44,10 +44,14 @@ function article_card(array $article, string $variant = 'default', array $attrib
 		default => null,
 	};
 
-	$wrapper = '<article ' . attrs($attributes) . ' class="' . e(clsx('group relative', $attributes['class'] ?? null)) . '">';
+	// Класс пагинации и класс карточки должны попасть в ОДИН атрибут class:
+	// два class на одном теге — невалидный HTML, и браузер берёт первый,
+	// из-за чего group-hover и подъём карточки молча не работают.
+	$attributes['class'] = clsx($attributes['class'] ?? null, 'group relative');
+	$wrapper = '<article ' . attrs($attributes) . '>';
 	$wrapperEnd = '</article>';
 
-	$media = static function (string $preset, string $ratio, string $width, string $height, bool $eager = false) use ($cover, $title): string {
+	$media = static function (string $preset, string $width, string $height, bool $eager = false) use ($cover, $title): string {
 		if ($cover === '') {
 			return '<div class="flex h-full w-full items-center justify-center bg-paper-2 text-line-strong">'
 				. icon_svg('bird', 40) . '</div>';
@@ -56,15 +60,15 @@ function article_card(array $article, string $variant = 'default', array $attrib
 		return '<img src="' . e(image_url($cover, $preset)) . '" alt="' . e($title) . '"'
 			. ' width="' . $width . '" height="' . $height . '"'
 			. ($eager ? ' fetchpriority="high"' : ' loading="lazy"')
-			. ' class="h-full w-full object-cover">';
+			. ' class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]">';
 	};
 
 	if ($variant === 'hero') {
 		return $wrapper
 			. '<a href="' . e($url) . '" class="block">'
-			. '<div class="grid gap-0 overflow-hidden rounded-2xl border border-line bg-white/80 card-lift md:grid-cols-[1.15fr_1fr]">'
-			. '<div class="card-media relative aspect-[16/10] md:aspect-auto md:min-h-[22rem]">'
-			. $media('cover', '16/10', '1200', '750', true)
+			. '<div class="grid gap-0 overflow-hidden rounded-2xl border border-line bg-white/80 transition duration-200 hover:-translate-y-0.5 hover:border-line-strong hover:shadow-lift md:grid-cols-[1.15fr_1fr]">'
+			. '<div class="relative aspect-[16/10] overflow-hidden bg-paper-2 md:aspect-auto md:min-h-[22rem]">'
+			. $media('cover', '1200', '750', true)
 			. '<span class="absolute left-3 top-3 rounded-full px-2.5 py-1 text-[11px] font-semibold uppercase tracking-wide ring-1 ' . e($accent['badge']) . '">'
 			. e((string) ($article['category_title'] ?? '')) . '</span>'
 			. '</div>'
@@ -78,7 +82,7 @@ function article_card(array $article, string $variant = 'default', array $attrib
 			. '<span class="inline-flex items-center gap-1">' . icon_svg('clock', 12) . e((string) $minutes) . ' мин</span>'
 			. '</div>'
 			. '<h2 class="mt-3 font-display text-2xl leading-tight text-ink sm:text-3xl">'
-			. '<span class="link-underline">' . e($title) . '</span></h2>'
+			. '<span class="' . link_underline() . '">' . e($title) . '</span></h2>'
 			. ($showLead && $lead !== '' ? '<p class="mt-3 line-clamp-3 text-sm leading-relaxed text-ink-soft">' . e($lead) . '</p>' : '')
 			. '</div>'
 			. '<div class="mt-5 flex items-center gap-2 text-xs text-muted">'
@@ -93,7 +97,7 @@ function article_card(array $article, string $variant = 'default', array $attrib
 		return $wrapper
 			. '<a href="' . e($url) . '" data-rise class="flex gap-3 rounded-xl p-1 transition-colors hover:bg-paper-2/70">'
 			. ($cover !== ''
-				? '<div class="card-media relative h-[4.5rem] w-[6rem] shrink-0 overflow-hidden rounded-lg">'
+				? '<div class="relative h-[4.5rem] w-[6rem] shrink-0 overflow-hidden rounded-lg bg-paper-2">'
 					. '<img src="' . e(image_url($cover, 'row')) . '" alt="" width="200" height="130" loading="lazy" class="h-full w-full object-cover">'
 					. '</div>'
 				: '')
@@ -104,7 +108,7 @@ function article_card(array $article, string $variant = 'default', array $attrib
 			. '<span class="truncate">' . e((string) ($article['category_title'] ?? '')) . '</span>'
 			. '</div>'
 			. '<h3 class="mt-1 line-clamp-2 text-sm font-medium leading-snug text-ink">'
-			. '<span class="link-underline">' . e($title) . '</span></h3>'
+			. '<span class="' . link_underline() . '">' . e($title) . '</span></h3>'
 			. '</div></a>'
 			. $wrapperEnd;
 	}
@@ -113,19 +117,19 @@ function article_card(array $article, string $variant = 'default', array $attrib
 		return $wrapper
 			. '<a href="' . e($url) . '" class="flex items-baseline gap-3 py-2.5">'
 			. '<time datetime="' . e($iso) . '" class="w-10 shrink-0 font-mono text-xs text-muted">' . e($time) . '</time>'
-			. '<h3 class="text-sm leading-snug text-ink"><span class="link-underline">' . e($title) . '</span></h3>'
+			. '<h3 class="text-sm leading-snug text-ink"><span class="' . link_underline() . '">' . e($title) . '</span></h3>'
 			. '</a>'
 			. $wrapperEnd;
 	}
 
 	return $wrapper
-		. '<a href="' . e($url) . '" data-rise class="flex h-full flex-col overflow-hidden rounded-2xl border border-line bg-white/80 card-lift">'
-		. '<div class="card-media relative aspect-[16/10]">'
-		. $media('card', '16/10', '640', '400')
+		. '<a href="' . e($url) . '" data-rise class="flex h-full flex-col overflow-hidden rounded-2xl border border-line bg-white/80 transition duration-200 hover:-translate-y-0.5 hover:border-line-strong hover:shadow-lift">'
+		. '<div class="relative aspect-[16/10] overflow-hidden bg-paper-2">'
+		. $media('card', '640', '400')
 		. '<span class="absolute left-3 top-3 rounded-full px-2.5 py-1 text-[11px] font-semibold ring-1 ' . e($accent['badge']) . '">'
 		. e((string) ($article['category_title'] ?? '')) . '</span>'
 		. ($flagLabel !== null
-			? '<span class="flag absolute right-3 top-3 inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-[11px] font-semibold text-ink ring-1 ring-ink/10">'
+			? '<span class="absolute right-3 top-3 inline-flex items-center gap-1 rounded-full bg-paper/85 px-2.5 py-1 text-[11px] font-semibold text-ink ring-1 ring-ink/10 backdrop-blur-sm">'
 				. icon_svg((string) $flagIcon, 12, 'text-alert') . e($flagLabel) . '</span>'
 			: '')
 		. '</div>'
@@ -135,7 +139,7 @@ function article_card(array $article, string $variant = 'default', array $attrib
 		. '<span aria-hidden="true">·</span>'
 		. '<span class="inline-flex items-center gap-1">' . icon_svg('clock', 11) . e((string) $minutes) . ' мин</span>'
 		. '</div>'
-		. '<h3 class="mt-1.5 font-display text-lg leading-snug text-ink"><span class="link-underline">' . e($title) . '</span></h3>'
+		. '<h3 class="mt-1.5 font-display text-lg leading-snug text-ink"><span class="' . link_underline() . '">' . e($title) . '</span></h3>'
 		. ($showLead && $lead !== '' ? '<p class="mt-2 line-clamp-2 text-[13px] leading-relaxed text-ink-soft/90">' . e($lead) . '</p>' : '')
 		. '<div class="mt-auto flex items-center justify-between gap-2 pt-3 text-[11px] text-muted">'
 		. '<span class="truncate">' . e($source) . '</span>'

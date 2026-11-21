@@ -32,6 +32,20 @@
 	--color-alert-soft: #fdeceb;
 	--color-gold: #b06f00;
 
+	/* Анимации как токены: в шаблонах это animate-rise и animate-ping. */
+	--animate-rise: rise 420ms cubic-bezier(0.2, 0.7, 0.2, 1) both;
+
+	@keyframes rise {
+		from {
+			opacity: 0;
+			transform: translateY(8px);
+		}
+		to {
+			opacity: 1;
+			transform: none;
+		}
+	}
+
 	--radius-card: 0.875rem;
 	--shadow-card: 0 1px 2px rgb(23 19 15 / 0.05), 0 10px 30px -18px rgb(23 19 15 / 0.35);
 	--shadow-lift: 0 2px 4px rgb(23 19 15 / 0.06), 0 18px 40px -20px rgb(23 19 15 / 0.4);
@@ -85,202 +99,66 @@
 }
 
 @layer components {
-	/* Заголовок-ссылка: подчёркивание растёт слева, текст не дёргается. */
-	.link-underline {
-		background-image: linear-gradient(currentColor, currentColor);
-		background-position: 0 100%;
-		background-repeat: no-repeat;
-		background-size: 0% 1px;
-		transition: background-size 220ms ease, color 160ms ease;
-	}
-
-	.link-underline:hover,
-	.group:hover .link-underline {
-		background-size: 100% 1px;
-	}
-
-	/* Карточка: подъём на 2px и мягкая тень — без «прыжков» раскладки. */
-	.card-lift {
-		transition: transform 240ms cubic-bezier(0.2, 0.7, 0.2, 1), box-shadow 240ms ease, border-color 240ms ease;
-	}
-
-	.card-lift:hover {
-		transform: translateY(-2px);
-		box-shadow: var(--shadow-lift);
-	}
-
-	.card-media {
-		overflow: hidden;
-		background-color: var(--color-paper-2);
-	}
-
-	.card-media img {
-		transition: transform 520ms cubic-bezier(0.2, 0.7, 0.2, 1), filter 240ms ease;
-	}
-
-	.group:hover .card-media img {
-		transform: scale(1.035);
-	}
-
-	/* Полоса прогресса чтения: один элемент, без скрипта на каждый абзац. */
-	.reading-progress {
-		transform-origin: 0 50%;
-		transform: scaleX(var(--progress, 0));
-		transition: transform 90ms linear;
-	}
-
-	/* Живая лента: маркер предупреждения пульсирует, текст не мигает. */
-	.pulse-dot::after {
-		content: "";
-		position: absolute;
-		inset: 0;
-		border-radius: 9999px;
-		background-color: currentColor;
-		animation: pulse-ring 1.9s cubic-bezier(0.3, 0, 0.4, 1) infinite;
-	}
-
-	@keyframes pulse-ring {
-		0% {
-			opacity: 0.55;
-			transform: scale(1);
-		}
-		70%,
-		100% {
-			 opacity: 0;
-			transform: scale(2.4);
-		}
-	}
-
-	/* Появление карточек: только при первом рендере, без «мигания» при htmx. */
-	@keyframes rise {
-		from {
-			opacity: 0;
-			transform: translateY(8px);
-		}
-		to {
-			opacity: 1;
-			transform: none;
-		}
-	}
-
-	.rise {
-		animation: rise 420ms cubic-bezier(0.2, 0.7, 0.2, 1) both;
-	}
-
-	/* htmx: индикатор догрузки и состояние «пусто». */
-	.htmx-indicator {
-		opacity: 0;
-		transition: opacity 160ms ease;
-	}
-
-	.htmx-request .htmx-indicator,
-	.htmx-request.htmx-indicator {
-		opacity: 1;
-	}
-
-	/* Пагинация Bolt: контейнер «Показать ещё» стоит отдельным блоком после
-	   сетки, своей сетки у него нет, поэтому отступ задаём здесь. Пустой
-	   контейнер (страниц больше нет) отступа не оставляет. */
-	.pagination__more {
-		margin-top: 1.75rem;
-	}
-
-	.pagination__more--empty {
-		margin-top: 0;
-	}
-
-	/* Текст статьи: типографика без плагина, чтобы не тянуть лишний слой. */
+	/*
+	 * Единственное исключение из «только утилиты»: разметку статьи пишет
+	 * редактор в CMS, навесить классы на абзацы нельзя. Поэтому здесь
+	 * @apply — те же утилиты Tailwind, но применённые к чужому HTML.
+	 */
 	.prose-news {
-		font-size: 1.0625rem;
-		line-height: 1.75;
-		color: var(--color-ink-soft);
-	}
+		@apply text-[1.0625rem] leading-[1.75] text-ink-soft;
 
-	.prose-news > * + * {
-		margin-top: 1.15em;
-	}
+		& > * + * {
+			@apply mt-[1.15em];
+		}
 
-	.prose-news p:first-of-type::first-letter {
-		float: left;
-		font-family: var(--font-display);
-		font-size: 3.2em;
-		line-height: 0.86;
-		padding: 0.06em 0.12em 0 0;
-		color: var(--color-ink);
-	}
+		& > p:first-of-type::first-letter {
+			@apply float-left pt-[0.06em] pr-[0.12em] font-display text-[3.2em] leading-[0.86] text-ink;
+		}
 
-	.prose-news h2 {
-		font-family: var(--font-display);
-		font-size: 1.5rem;
-		line-height: 1.3;
-		color: var(--color-ink);
-		margin-top: 1.8em;
-	}
+		& > h2 {
+			@apply mt-[1.8em] font-display text-2xl leading-[1.3] text-ink;
+		}
 
-	.prose-news h3 {
-		font-size: 1.15rem;
-		font-weight: 600;
-		color: var(--color-ink);
-		margin-top: 1.5em;
-	}
+		& > h3 {
+			@apply mt-[1.5em] text-[1.15rem] font-semibold text-ink;
+		}
 
-	.prose-news strong,
-	.prose-news b {
-		color: var(--color-ink);
-		font-weight: 600;
-	}
+		& strong,
+		& b {
+			@apply font-semibold text-ink;
+		}
 
-	.prose-news a {
-		color: var(--color-brand);
-		text-decoration: underline;
-		text-underline-offset: 2px;
-	}
+		& a {
+			@apply text-brand underline underline-offset-2;
+		}
 
-	.prose-news blockquote {
-		border-left: 3px solid var(--color-brand);
-		padding-left: 1.1em;
-		font-family: var(--font-display);
-		font-size: 1.15em;
-		color: var(--color-ink);
-	}
+		& blockquote {
+			@apply border-l-[3px] border-brand pl-[1.1em] font-display text-[1.15em] text-ink;
+		}
 
-	.prose-news ul,
-	.prose-news ol {
-		padding-left: 1.35em;
-	}
+		& ul {
+			@apply list-disc pl-[1.35em];
+		}
 
-	.prose-news ul {
-		list-style: disc;
-	}
+		& ol {
+			@apply list-decimal pl-[1.35em];
+		}
 
-	.prose-news ol {
-		list-style: decimal;
-	}
+		& li + li {
+			@apply mt-[0.35em];
+		}
 
-	.prose-news li + li {
-		margin-top: 0.35em;
-	}
+		& figure {
+			@apply my-[1.6em];
+		}
 
-	.prose-news figure {
-		margin: 1.6em 0;
-	}
+		& figure img {
+			@apply h-auto w-full rounded-card;
+		}
 
-	.prose-news figure img {
-		width: 100%;
-		height: auto;
-		border-radius: var(--radius-card);
-	}
-
-	.prose-news figcaption {
-		margin-top: 0.5em;
-		font-size: 0.8125rem;
-		color: var(--color-muted);
-	}
-
-	/* Плашка «важно» на карточке: не перекрывает картинку целиком. */
-	.flag {
-		backdrop-filter: blur(6px);
-		background-color: rgb(247 244 239 / 0.86);
+		& figcaption {
+			@apply mt-2 text-[0.8125rem] text-muted;
+		}
 	}
 }
 

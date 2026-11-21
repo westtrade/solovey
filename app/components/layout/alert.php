@@ -19,7 +19,7 @@ if ($alert === null) {
 <div class="border-b border-alert/20 bg-alert-soft/80">
 	<div class="mx-auto flex max-w-7xl items-start gap-3 px-4 py-2.5">
 		<span class="relative mt-1 inline-flex h-2 w-2 shrink-0">
-			<span class="pulse-dot absolute inset-0 rounded-full bg-alert"></span>
+			<span class="absolute inset-0 rounded-full bg-alert animate-ping [animation-duration:1.9s]"></span>
 			<span class="relative inline-flex h-2 w-2 rounded-full bg-alert"></span>
 		</span>
 

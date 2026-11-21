@@ -31,7 +31,7 @@ $today = (new DateTimeImmutable('now'))->format('c');
 			<span class="ml-auto flex items-center gap-4">
 				<span class="flex items-center gap-1.5 text-brand">
 					<span class="relative inline-flex h-1.5 w-1.5">
-						<span class="pulse-dot absolute inset-0 rounded-full bg-brand"></span>
+						<span class="absolute inset-0 rounded-full bg-brand animate-ping [animation-duration:1.9s]"></span>
 						<span class="relative inline-flex h-1.5 w-1.5 rounded-full bg-brand"></span>
 					</span>
 					<?= e(ru_count($stats['today'], 'новость', 'новости', 'новостей')) ?> за сутки

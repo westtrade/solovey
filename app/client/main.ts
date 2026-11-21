@@ -140,7 +140,7 @@ Alpine.data('readingProgress', () => ({
  */
 htmx.onLoad((root: Element) => {
 	root.querySelectorAll<HTMLElement>('[data-rise]').forEach((node, index) => {
-		node.classList.add('rise');
+		node.classList.add('animate-rise');
 		node.style.animationDelay = `${Math.min(index * 40, 240)}ms`;
 	});
 });

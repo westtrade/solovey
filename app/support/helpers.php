@@ -353,3 +353,17 @@ function app_assets(): string
 
 	return vite_assets(is_array($entries) ? $entries : []);
 }
+
+/**
+ * Подчёркивание заголовка-ссылки: растёт слева при наведении на карточку.
+ *
+ * Живёт функцией, а не классом в CSS, потому что это чистые утилиты
+ * Tailwind: градиент-подложка высотой 1px и переход по `background-size`.
+ * Повторять такую строку в каждом шаблоне — хуже, чем одна функция.
+ */
+function link_underline(): string
+{
+	return 'bg-[linear-gradient(currentColor,currentColor)] bg-[length:0%_1px] bg-left-bottom bg-no-repeat '
+		. 'transition-[background-size] duration-200 '
+		. 'group-hover:bg-[length:100%_1px] hover:bg-[length:100%_1px]';
+}

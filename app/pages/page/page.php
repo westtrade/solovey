@@ -47,7 +47,7 @@ $this->start('page');
 	<div class="mt-10 rounded-2xl border border-line bg-paper-2/50 p-5">
 		<p class="text-sm text-ink-soft">
 			Не нашли ответ? Напишите в редакцию —
-			<a href="/kontakty" class="link-underline font-medium text-brand">контакты и почта</a>.
+			<a href="/kontakty" class="<?= link_underline() ?> font-medium text-brand">контакты и почта</a>.
 		</p>
 	</div>
 </div>
